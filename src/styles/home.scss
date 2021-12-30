@@ -1,205 +1,205 @@
-@import "./variable";
-@import "./animate.scss";
+@import './variable';
+@import './animate.scss';
 body {
-  margin: 0;
+	margin: 0;
 }
 img {
-  width: 100%;
-  height: 100%;
+	width: 100%;
+	height: 100%;
 }
 iframe {
-  border: 4px solid #CCCCCC;
-  margin: 20px auto;
+	border: 4px solid #cccccc;
+	margin: 20px auto;
 }
 .home-page {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0; 
-  bottom: 0;
-  margin: 50px 200px 0 200px;
-  height: 100vh;
-  width: calc(100vw-400px);
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	margin: 50px 200px 0 200px;
+	height: 100vh;
+	width: calc(100vw-400px);
 }
 .header {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  background-color: rgba($color: white, $alpha: .5);
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	background-color: rgba($color: white, $alpha: 0.5);
 }
 .tools-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: #eef0f6 solid 2px;
-  // width: 239px;
-  width: 100%;
-  height: 46px;
-  margin-bottom: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: #eef0f6 solid 2px;
+	// width: 239px;
+	width: 100%;
+	height: 46px;
+	margin-bottom: 10px;
 }
-.tools-list-tab, .components-list-tab {
-  flex: 1;
-  font-size: 14px;
-  color: rgba(0,0,0,.8);
-  text-align: center;
+.tools-list-tab,
+.components-list-tab {
+	flex: 1;
+	font-size: 14px;
+	color: rgba(0, 0, 0, 0.8);
+	text-align: center;
 }
 .tab-active {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 .tools {
-  display: flex;
-  justify-content: flex-start;
-  position: fixed;
-  flex-direction: column;
-  left: 0;
-  top: 50px;
-  bottom: 0;
-  flex-wrap: wrap;
-  width: 200px;
-  background-color: white;
-  z-index: 9;
+	display: flex;
+	justify-content: flex-start;
+	position: fixed;
+	flex-direction: column;
+	left: 0;
+	top: 50px;
+	bottom: 0;
+	flex-wrap: wrap;
+	width: 200px;
+	background-color: white;
+	z-index: 9;
 }
 .tools-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex: 1;
-  width: 200px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex: 1;
+	width: 200px;
 }
-.tools-list-item, 
+.tools-list-item,
 .tools-list-item img {
-  height: 36px;
-  width: 36px;
+	height: 36px;
+	width: 36px;
 }
 .components-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-  height: 800px;
-  width: 200px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	height: 800px;
+	width: 200px;
 }
-.components-list-item, 
+.components-list-item,
 .components-list-item img {
-  height: 80px;
-  width: 80px;
+	height: 80px;
+	width: 80px;
 }
 .views-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: calc(100vw - 400px);
-  height: calc(100vh - 50px);
-  background-color: #f5f7fa;
-  overflow: auto;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: calc(100vw - 400px);
+	height: calc(100vh - 50px);
+	background-color: #f5f7fa;
+	overflow: auto;
 }
 .phone-type {
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  width: 100px;
-  height: 25px;
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	width: 100px;
+	height: 25px;
 }
 .views {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: calc(100vw - 400px);
-  height: calc(100vh - 250px);
-  margin: 0 auto;
-  margin-bottom: 100px;
-  background-color: #f5f7fa;
-  overflow: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: calc(100vw - 400px);
+	height: calc(100vh - 250px);
+	margin: 0 auto;
+	margin-bottom: 100px;
+	background-color: #f5f7fa;
+	overflow: auto;
 }
 .views-scale {
-  position: fixed;
-  bottom: 16px;
-  right: 343px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 138px;
-  height: 28px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .8);
+	position: fixed;
+	bottom: 16px;
+	right: 343px;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	width: 138px;
+	height: 28px;
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 .console {
-  height: 200px;
-  width: 100%;
-  background-color: rgba($color: #000000, $alpha: .9);
+	height: 200px;
+	width: 100%;
+	background-color: rgba($color: #000000, $alpha: 0.9);
 }
 .run-btn {
-  height: 50px;
-  width: 100px;
-  line-height: 200%;
-  background-color: $blue-deep;
-  margin: 0 auto;
+	height: 50px;
+	width: 100px;
+	line-height: 200%;
+	background-color: $blue-deep;
+	margin: 0 auto;
 }
 #visualViews {
-  position: relative;
-  z-index: 9;
-  // pointer-events: none;
+	position: relative;
+	z-index: 9;
+	// pointer-events: none;
 }
 
 #fileContent {
-
 }
 .edit {
-  position: fixed;
-  right: 0;
-  top: 50px;
-  bottom: 0;
-  width: 320px;
-  padding: 16px 24px;
-  font-size: 12px;
-  color: rgba($color: #000000, $alpha: .6);
-  background-color: white;
-  border-top: 2px solid #eef0f6;
-  z-index: 97;
+	position: fixed;
+	right: 0;
+	top: 50px;
+	bottom: 0;
+	width: 320px;
+	padding: 16px 24px;
+	font-size: 12px;
+	color: rgba($color: #000000, $alpha: 0.6);
+	background-color: white;
+	border-top: 2px solid #eef0f6;
+	z-index: 97;
 }
 .edit-item {
-  margin-bottom: 16px;
-  margin-right: 14px;
+	margin-bottom: 16px;
+	margin-right: 14px;
 }
 label {
-  margin-right: 8px;
+	margin-right: 8px;
 }
 .edit-item-wrapper {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 .text-aligh-icon {
-  height: 24px;
-  width: 24px;
-  margin: 5px;
+	height: 24px;
+	width: 24px;
+	margin: 5px;
 }
 .text-aligh-icon:hover {
-  background-color: $gray;
+	background-color: $gray;
 }
 .el-button {
-  width: 140px;
-  height: 32px;
-  padding: 0;
-  line-height: 32px;
+	width: 140px;
+	height: 32px;
+	padding: 0;
+	line-height: 32px;
 }
 .source-code {
-  width: 80%;
-  min-height: 100px;
-  background-color: $gray;
+	width: 80%;
+	min-height: 100px;
+	background-color: $gray;
 }
 .dialog-mask {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, .4);
-  z-index: 98;
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.4);
+	z-index: 98;
 }
 .source-code {
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
+	width: 100%;
+	padding: 10px;
+	box-sizing: border-box;
 }

@@ -1,31 +1,48 @@
 <template>
-  <div class="dialog">
-    <div class="content-wrap">
-      <div class="img-pre"></div>
-      <div class="img-base64"></div>
-    </div>
-    <div class="btn-wrapper">
-      <div class="select-btn">选择文件</div>
-      <div class="confirm-btn" @click="confirm">确定</div>
-    </div>
-    <div class="close-btn"></div>
-    <!-- <input style="display: none;"/> -->
-  </div>
+	<div class="dialog">
+		<div class="content-wrap">
+			<div class="img-pre"></div>
+			<div class="img-base64"></div>
+		</div>
+		<div class="btn-wrapper">
+			<div class="select-btn">选择文件</div>
+			<div class="confirm-btn" @click="confirm">确定</div>
+		</div>
+		<div class="close-btn" @click="close">
+			<svg t="1640851714567" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2134" width="40" height="40">
+				<path
+					d="M562.281173 510.800685l294.996664-293.466821c13.94971-13.878079 14.020318-36.367279 0.14224-50.316989-13.913894-13.984503-36.367279-14.020318-50.316989-0.14224L512.034792 460.377272 219.528855 166.982082c-13.842263-13.878079-36.367279-13.94971-50.316989-0.071631-13.913894 13.878079-13.948687 36.403095-0.071631 50.352805L461.576587 510.587837 166.721139 803.876604c-13.94971 13.878079-14.020318 36.367279-0.14224 50.316989 6.939039 6.974855 16.084327 10.497075 25.229614 10.497075 9.073656 0 18.148335-3.451612 25.087375-10.354835l294.926056-293.360398 295.17472 296.064996c6.939039 6.974855 16.048511 10.462283 25.193799 10.462283 9.109472 0 18.184151-3.487428 25.12319-10.390651 13.913894-13.878079 13.94971-36.367279 0.071631-50.316989L562.281173 510.800685z"
+					p-id="2135"
+					fill="#707070"
+				></path>
+			</svg>
+		</div>
+		<!-- <input style="display: none;"/> -->
+	</div>
 </template>
 
 <script>
 export default {
-  data() {
+	props: ['visible'],
+	data() {
+		return {
+			file: ''
+		}
+	},
+	mounted() {},
+	methods: {
+		confirm() {
+			this.$emit('closed', ['1'])
+		},
+		close() {
+			console.log('close')
 
-  },
-  methods: {
-    confirm() {
-
-    }
-  }
+			this.$emit('closed', ['1'])
+		}
+	}
 }
 </script>
 
 <style scoped>
-@import url("../../../styles/toBase64Dialog.scss");
+@import url('../../../styles/toBase64Dialog.scss');
 </style>
