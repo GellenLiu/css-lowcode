@@ -81,11 +81,11 @@
 			<div v-if="!editActive">
 				<div class="edit-item">
 					<label>选择模块</label>
-					<el-input v-model="cssMap.inputClass" placeholder="请输入class"></el-input>
+					<el-input v-model="activeCssMap._className" placeholder="请输入class"></el-input>
 				</div>
 				<div class="edit-item">
 					<label>位置</label>
-					<el-input v-model="cssMap.inputPosition" placeholder="请输入位置"></el-input>
+					<el-input v-model="activeCssMap.inputPosition" placeholder="请输入位置"></el-input>
 				</div>
 				<div class="edit-item edit-item-wrapper">
 					<label>布局</label>
@@ -105,28 +105,44 @@
 				<div class="edit-item-wrapper">
 					<div class="edit-item">
 						<label>宽度</label>
-						<el-input v-model="cssMap.inputWidth" placeholder="请输入宽度"></el-input>
+						<el-input v-model="activeCssMap.width" placeholder="请输入宽度"></el-input>
 					</div>
 					<div class="edit-item">
 						<label>高度</label>
-						<el-input v-model="cssMap.inputHeight" placeholder="请输入高度"></el-input>
+						<el-input v-model="activeCssMap.height" placeholder="请输入高度"></el-input>
 					</div>
 				</div>
 				<div class="edit-item">
 					<label>圆角</label>
-					<el-input v-model="cssMap.inputHeight" placeholder="请输入圆角"></el-input>
+					<el-input v-model="activeCssMap.borderRadius" placeholder="请输入圆角"></el-input>
 				</div>
 				<div class="edit-item">
 					<label>文本</label>
 				</div>
 				<div class="edit-item">
 					<label>大小</label>
-					<el-input v-model="cssMap.inputFontSize" placeholder="请输入字体大小"></el-input>
+					<el-input v-model="activeCssMap.fontSize" placeholder="请输入字体大小"></el-input>
 				</div>
 				<div class="edit-item">
 					<label>颜色</label>
-					<el-input v-model="cssMap.inputFontColor" placeholder="请输入字体颜色"></el-input>
+					<el-input v-model="activeCssMap.fontColor" placeholder="请输入字体颜色"></el-input>
 					<el-color-picker v-model="cssMap.fontColorSelect"></el-color-picker>
+				</div>
+        <div class="edit-item">
+					<label>省略换行</label>
+					<el-dropdown @command="selectText">
+					  <span class="el-dropdown-link">
+							自动换行
+							<i class="el-icon-arrow-down el-icon--right"></i>
+						</span>
+						<el-dropdown-menu slot="dropdown">
+							<el-dropdown-item command="animate__fadeIn">单行省略</el-dropdown-item>
+							<el-dropdown-item command="animate__fadeInDown">双行省略</el-dropdown-item>
+							<el-dropdown-item command="animate__fadeInLeft">单行省略</el-dropdown-item>
+							<el-dropdown-item command="animate__fadeInRight" disabled>单行省略</el-dropdown-item>
+							<el-dropdown-item command="animate__fadeOutUp">单行省略</el-dropdown-item>
+						</el-dropdown-menu>
+					</el-dropdown>
 				</div>
 				<div class="edit-item edit-item-wrapper">
 					<div class="text-aligh-icon">
@@ -143,7 +159,7 @@
 					<label>添加动画</label>
 					<el-dropdown @command="addAnimate">
 						<span class="el-dropdown-link">
-							下拉菜单
+							选择动画
 							<i class="el-icon-arrow-down el-icon--right"></i>
 						</span>
 						<el-dropdown-menu slot="dropdown">
@@ -190,7 +206,8 @@ export default {
 			classMap: new ClassMap(), //文件所有class
 			cssMap: new CssMap(), //当前class的css内容
 			inputContent: '',
-			checkList: [] // 源代码调试
+			checkList: [], // 源代码调试
+      activeCssMap: new CssMap()
 		};
 	},
 	mounted() {
@@ -205,7 +222,8 @@ export default {
 			that.htmlAnalysis();
 		});
 		this.addSpacingjs();
-		this.getDomNode();
+		// this.getDomNode();
+    this.settingInit()
 	},
 	methods: {
 		// tab切换
@@ -243,6 +261,11 @@ export default {
 				this.currentPhone = 'iphone X (375 x 812)';
 			}
 		},
+    // 省略换行选择
+    selectText(command) {
+      this.command = command
+      this.cssMap.setTextEllipsis()
+    },
 		// 添加动画
 		addAnimate(command) {
 			console.log(command);
@@ -250,7 +273,13 @@ export default {
 			this.command = 'animate__animated ' + command;
 		},
 		// 重置css设置选项,遍历cssmap
-		settingInit() {},
+		settingInit(className) {
+      // 获取style节点
+      let style =  document.getElementById('visualViews').contentWindow.document.querySelector('style')
+      console.log(style)
+      // let base =  style.indexOf(className) 
+
+    },
     // 添加样式到对应class
 		run() {
 			console.log('run');
@@ -315,19 +344,20 @@ export default {
 				let that = this;
 				reader.onload = function (e) {
 					fileContent = e.target.result;
-					// let html = document.getElementById("visualViews").contentWindow.document.querySelector("html")
-					// document.getElementById("visualViews").contentWindow.document.removeChild(html)
+          // 写入内容
 					document.getElementById('visualViews').contentWindow.document.write(fileContent);
-					// document.write(fileContent);
+          // 添加点击事件
 					document.getElementById('visualViews').contentWindow.document.addEventListener('click', function (e) {
-						console.log(e.target);
-						console.log(e.target.className);
-						document.getElementById('visualViews').contentWindow.document.querySelector('.' + e.target.className).style.border = '#fff solid 3px';
+						console.log("class:" + e.target.className);
+            if(e.target.className === '') {
+              console.log("the class is empty!")
+            } else {
+					  	document.getElementById('visualViews').contentWindow.document.querySelector('.' + e.target.className).style.outline = 'red solid 2px'
+              that.activeCssMap = new CssMap(e.target.className)
+              console.log(that.cssMap)
+            }
 					});
-					// console.log(fileContent)
 					that.inputContent = fileContent;
-					// let views = document.getElementById("visualViews").contentWindow.document
-					// views.html.appendChild(fileContent)
 				};
 				reader.onloadend = function () {
 					that.addSpacingjs();
@@ -337,17 +367,10 @@ export default {
 		},
 		// 获取dom节点的类名
 		getDomNode() {
-			// 点击获取元素
-			// document.querySelector
-			// document.getElementById("visualViews").contentWindow.addEventListener("click", function(e){
-			//   console.log(e.target)
-			// })
 			document.addEventListener('click', function (e) {
 				console.log(e.target);
-				console.log(e);
+				console.log(e.className);
 			});
-			// let html = document.getElementById("visualViews").contentWindow.document.querySelector("html")
-			// document.getElementById("visualViews").contentWindow.document.removeChild(html)
 		},
 		getBase64(img) {
 			console.log('getBase64()');
