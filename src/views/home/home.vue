@@ -81,7 +81,7 @@
 			<div v-if="!editActive">
 				<div class="edit-item">
 					<label>选择模块</label>
-					<el-input v-model="activeCssMap._className" placeholder="请输入class"></el-input>
+					<el-input v-model="activeCssMap.className" placeholder="请输入class"></el-input>
 				</div>
 				<div class="edit-item">
 					<label>位置</label>
@@ -105,7 +105,7 @@
 				<div class="edit-item-wrapper">
 					<div class="edit-item">
 						<label>宽度</label>
-						<el-input v-model="activeCssMap.width" placeholder="请输入宽度"></el-input>
+						<el-input v-model="activeCssMap.width" placeholder="请输入宽度" @input="cssInput"></el-input>
 					</div>
 					<div class="edit-item">
 						<label>高度</label>
@@ -126,7 +126,7 @@
 				<div class="edit-item">
 					<label>颜色</label>
 					<el-input v-model="activeCssMap.fontColor" placeholder="请输入字体颜色"></el-input>
-					<el-color-picker v-model="cssMap.fontColorSelect"></el-color-picker>
+					<el-color-picker v-model="activeCssMap.fontColorSelect"></el-color-picker>
 				</div>
         <div class="edit-item">
 					<label>省略换行</label>
@@ -176,8 +176,10 @@
 			</div>
 			<div v-else>
 				<div class="source-code">
-					<el-checkbox-group v-model="checkList">
-						<el-checkbox v-for="checkitem in checkList" :label="checkitem" :key="checkitem">{{ checkitem }}</el-checkbox>
+					<el-checkbox-group v-model="checkedList">
+						<el-checkbox v-for="checkitem in checkList" :label="checkitem" :key="checkitem">
+              <span>{{checkitem}}</span>
+            </el-checkbox>
 					</el-checkbox-group>
 				</div>
 			</div>
@@ -204,18 +206,15 @@ export default {
 			command: '',
 			base64: '',
 			classMap: new ClassMap(), //文件所有class
-			cssMap: new CssMap(), //当前class的css内容
 			inputContent: '',
 			checkList: [], // 源代码调试
-      activeCssMap: new CssMap()
+      checkedList: [],
+      activeCssMap: new CssMap(),
+      activeClass: '',//选择红框
+      currentClass: ''
 		};
 	},
 	mounted() {
-		let testClass = new CssMap();
-		testClass.setWidth('100px');
-		testClass.setTextEllipsis();
-		console.log(testClass.showClass());
-
 		let that = this;
 		document.getElementById('fileContent').addEventListener('change', function () {
 			console.log('input事件监听');
@@ -226,6 +225,16 @@ export default {
     this.settingInit()
 	},
 	methods: {
+    // 源代码调试
+     handleCheckAllChange(val) {
+        this.checkedCities = val ? cityOptions : [];
+        this.isIndeterminate = false;
+      },
+      handleCheckedCitiesChange(value) {
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.cities.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+      },
 		// tab切换
 		switchTab(index) {
 			if (index == 0) {
@@ -242,7 +251,7 @@ export default {
 			}
 		},
 		switchPhone(command) {
-			console.log('command: ' + command);
+			console.log('机型command: ' + command);
 			if (command == 1) {
 				this.$refs.visualViews.style.width = '320px';
 				this.$refs.visualViews.style.height = '568px';
@@ -261,10 +270,14 @@ export default {
 				this.currentPhone = 'iphone X (375 x 812)';
 			}
 		},
+    cssInput() {
+      // console.log(this.activeCssMap)
+      console.log(this.activeCssMap.getContent())
+    },
     // 省略换行选择
     selectText(command) {
       this.command = command
-      this.cssMap.setTextEllipsis()
+      this.activeCssMap.setTextEllipsis()
     },
 		// 添加动画
 		addAnimate(command) {
@@ -273,28 +286,35 @@ export default {
 			this.command = 'animate__animated ' + command;
 		},
 		// 重置css设置选项,遍历cssmap
-		settingInit(className) {
-      // 获取style节点
+		settingInit(className='') {
       let style =  document.getElementById('visualViews').contentWindow.document.querySelector('style')
       console.log(style)
       // let base =  style.indexOf(className) 
-
+      for (let key in this.activeCssMap) {
+        console.log(this.activeCssMap)
+        this.checkList.push(this.activeCssMap.key)
+        console.log("key:"  + key)
+      }
     },
     // 添加样式到对应class
 		run() {
-			console.log('run');
-      console.log(this.cssMap)
+			console.log('添加样式到对应class,写入style标签');
+      if(this.classMap.hasClass(this.activeClass)) {
+        this.classMap.setClass(this.activeClass, this.activeCssMap)
+      } else {
+        this.classMap.addClass(this.activeClass, this.activeCssMap)
+      }
+      console.log(this.classMap)
 			let views = document.getElementById('visualViews').contentWindow.document;
-			console.log(views);
-
 			let style = document.createElement('style');
-			style.innerText = this.cssMap.inputClass + '{' + 'color: ' + this.cssMap.inputFontColor + ';}';
+			style.innerText = this.classMap.toString();
 			views.body.appendChild(style);
 			this.fileInfo();
 		},
 		// 下载文件
 		downloadCss() {
-			this.download('1234', '123.css');
+      let content = this.classMap.getContent()
+			this.download(content, 'index.css');
 		},
 		download(content, filename) {
 			var eleLink = document.createElement('a');
@@ -335,7 +355,6 @@ export default {
 		fileInfo() {
 			let resultFile = document.getElementById('fileContent').files[0];
 			if (resultFile) {
-				// 获取文件信息
 				this.file = resultFile;
 				this.fileName = resultFile.name;
 				let reader = new FileReader();
@@ -352,9 +371,13 @@ export default {
             if(e.target.className === '') {
               console.log("the class is empty!")
             } else {
-					  	document.getElementById('visualViews').contentWindow.document.querySelector('.' + e.target.className).style.outline = 'red solid 2px'
+              this.currentClass = this.activeClass
+              this.activeClass = e.target.className
+					  	document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.currentClass).style.outline = 'none'
+					  	document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = 'red solid 2px'
               that.activeCssMap = new CssMap(e.target.className)
-              console.log(that.cssMap)
+              that.settingInit(this.activeClass)
+
             }
 					});
 					that.inputContent = fileContent;

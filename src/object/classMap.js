@@ -13,7 +13,18 @@ export default class ClassMap {
 	addClass(className, cssContent = new CssMap()) {
 		this.data.set(className, cssContent)
 	}
+  setClass(className, cssContent = new CssMap()) {
+		this.data.set(className, cssContent)
+	}
 	deleteClass(className) {
 		this.data.delete(className)
 	}
+  getContent() {
+    let content = ''
+    for(let item of this.data) {
+      content += item.getContent()
+    }
+    console.log(content)
+    return content;
+  }
 }
