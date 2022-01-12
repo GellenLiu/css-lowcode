@@ -62,9 +62,9 @@
 			</div>
 			<!-- 视图缩放 -->
 			<div class="views-scale">
-				<div>—</div>
-				<div>{{ scaleTimes }}</div>
-				<div>+</div>
+				<div @click="reduceScale">—</div>
+				<div>{{ scaleTimes }}%</div>
+				<div @click="increaseScale">+</div>
 			</div>
 			<!-- 控制台 -->
 			<!-- <div class="console">
@@ -202,7 +202,7 @@ export default {
 			editActive: false,
 			show64Dialog: false,
 			currentPhone: 'iphone 6/7/8',
-			scaleTimes: '100%',
+			scaleTimes: 100,
 			command: '',
 			base64: '',
 			classMap: new ClassMap(), //文件所有class
@@ -270,6 +270,14 @@ export default {
 				this.currentPhone = 'iphone X (375 x 812)';
 			}
 		},
+    reduceScale() {
+      this.scaleTimes -= 10;
+      document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes/100})`
+    },
+    increaseScale() {
+      this.scaleTimes += 10;
+      document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes/100})`
+    },
     cssInput() {
       // console.log(this.activeCssMap)
       console.log(this.activeCssMap.getContent())

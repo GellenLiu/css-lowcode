@@ -90,6 +90,7 @@ iframe {
 .views-wrapper {
 	position: relative;
 	display: flex;
+  flex: 1;
 	flex-direction: column;
 	justify-content: center;
 	width: calc(100vw - 400px);
@@ -99,26 +100,33 @@ iframe {
 }
 .phone-type {
 	position: absolute;
-	left: 10px;
+	left: 20px;
 	top: 10px;
-	width: 100px;
+	width: 200px;
 	height: 25px;
 }
 .views {
 	display: flex;
+  flex: 1;
 	flex-direction: column;
 	align-items: center;
+  justify-content: center;
 	width: calc(100vw - 400px);
 	height: calc(100vh - 250px);
 	margin: 0 auto;
 	margin-bottom: 100px;
 	background-color: #f5f7fa;
-	overflow: auto;
+  overflow: auto;
+}
+#fileContent {
+  position: absolute;
+  right: 150px;
+  top: 10px;
 }
 .views-scale {
 	position: fixed;
 	bottom: 16px;
-	right: 343px;
+	right: 380px;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
