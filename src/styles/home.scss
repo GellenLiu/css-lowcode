@@ -198,6 +198,18 @@ label {
 	min-height: 100px;
 	background-color: $gray;
 }
+.checkTitle {
+  height: 20px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: rgb(250, 143, 2);
+}
+.el-checkbox__label {
+  font-size: 16px;
+}
+.el-checkbox__label span {
+  color: rgba(200, 0,0 , $alpha: 1.0);
+}
 .dialog-mask {
 	position: fixed;
 	left: 0;

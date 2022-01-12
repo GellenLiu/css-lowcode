@@ -174,11 +174,14 @@
 				<el-button :class="command" type="success" @click="run">运行</el-button>
 				<el-button type="success" @click="downloadCss">下载保存</el-button>
 			</div>
+      <!-- 源代码 -->
 			<div v-else>
 				<div class="source-code">
+          <div class="checkTitle">.{{ this.checkTitle }}</div>
 					<el-checkbox-group v-model="checkedList">
 						<el-checkbox v-for="checkitem in checkList" :label="checkitem" :key="checkitem">
-              <span>{{checkitem}}</span>
+              <span>{{checkitem.attri}}</span>
+              :{{checkitem.value}}
             </el-checkbox>
 					</el-checkbox-group>
 				</div>
@@ -202,11 +205,12 @@ export default {
 			editActive: false,
 			show64Dialog: false,
 			currentPhone: 'iphone 6/7/8',
-			scaleTimes: 100,
+			scaleTimes: 170,
 			command: '',
 			base64: '',
 			classMap: new ClassMap(), //文件所有class
 			inputContent: '',
+      checkTitle: '',
 			checkList: [], // 源代码调试
       checkedList: [],
       activeCssMap: new CssMap(),
@@ -223,6 +227,7 @@ export default {
 		this.addSpacingjs();
 		// this.getDomNode();
     this.settingInit()
+    document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes/100})`
 	},
 	methods: {
     // 源代码调试
@@ -311,10 +316,24 @@ export default {
       // 更新新选择的模块设置
       this.activeCssMap = this.classMap.getClassContent(className)
       // 更新源代码编辑
+      this.checkedList = []
+      this.checkList = []
       for (let key in this.activeCssMap) {
         console.log(this.activeCssMap)
-        this.checkList.push(this.activeCssMap.key)
-        console.log("key:"  + key)
+        if(key === 'className') {
+          this.checkTitle = this.activeCssMap[key];
+        } else {
+          let attributeMap = {
+            attri: '',
+            value: ''
+          }
+          attributeMap.attri = key;
+          attributeMap.value = this.activeCssMap[key]
+          this.checkList.push(attributeMap)
+          // console.log("attr:" + attributeMap[0]+":"+attributeMap[1])
+          console.log(attributeMap)
+          // this.checkedList.push(key)
+        }
       }
     },
     // 添加样式到对应class
@@ -339,6 +358,7 @@ export default {
       }
       // 新增节点
 			document.getElementById('visualViews').contentWindow.document.body.appendChild(style);
+      this.settingInit()
 			// this.fileInfo();
 		},
 		// 下载文件
