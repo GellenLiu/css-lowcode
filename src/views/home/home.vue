@@ -123,7 +123,7 @@
 					<label>大小</label>
 					<el-input v-model="activeCssMap.fontSize" placeholder="请输入字体大小"></el-input>
 				</div>
-				<div class="edit-item">
+				<div class="edit-item edit-item-wrapper">
 					<label>颜色</label>
 					<el-input v-model="activeCssMap.fontColor" placeholder="请输入字体颜色"></el-input>
 					<el-color-picker v-model="activeCssMap.fontColorSelect"></el-color-picker>
