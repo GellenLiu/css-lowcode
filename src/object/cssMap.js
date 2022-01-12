@@ -1,5 +1,4 @@
 export default class CssMap {
-	data = new Map()
 	constructor(className) {
 		this.className = className
 	}
@@ -21,9 +20,9 @@ export default class CssMap {
 				.substr(0)
 				.replace(/([A-Z])/g, '-$1')
 				.toLowerCase()
-			css += key + ':' + this[tmp] + ';'
+			css += key + ':' + this[tmp].toString() + ';'
 		}
-		return this.className + '{' + css + '}'
+		return "." + this.className + '{' + css + '}'
 	}
 	// flex布局
 	setFlexCenter() {

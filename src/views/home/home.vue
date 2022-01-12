@@ -277,19 +277,32 @@ export default {
     // 省略换行选择
     selectText(command) {
       this.command = command
-      this.activeCssMap.setTextEllipsis()
+      switch (command) {
+        case 'ellipsis' : 
+          this.activeCssMap.setTextEllipsis();
+          break;
+        default : 
+          this.activeCssMap.setTextEllipsis();
+          break;
+      }
     },
 		// 添加动画
 		addAnimate(command) {
 			console.log(command);
 			// 要加animate__animated 才生效
 			this.command = 'animate__animated ' + command;
+      this.activeCssMap.animate = 'bounce 2s';
 		},
 		// 重置css设置选项,遍历cssmap
-		settingInit(className='') {
+		settingInit(className = '') {
       let style =  document.getElementById('visualViews').contentWindow.document.querySelector('style')
       console.log(style)
       // let base =  style.indexOf(className) 
+      // 保存上次的设置
+      this.classMap.setClass(className, this.activeCssMap)
+      // 更新新选择的模块设置
+      this.activeCssMap = this.classMap.getClassContent(className)
+      // 更新源代码编辑
       for (let key in this.activeCssMap) {
         console.log(this.activeCssMap)
         this.checkList.push(this.activeCssMap.key)
@@ -306,10 +319,19 @@ export default {
       }
       console.log(this.classMap)
 			let views = document.getElementById('visualViews').contentWindow.document;
+      console.log(views.body)
 			let style = document.createElement('style');
-			style.innerText = this.classMap.toString();
-			views.body.appendChild(style);
-			this.fileInfo();
+      style.id = "css_id"
+			style.innerText = this.classMap.getContent();
+      console.log(style)
+      // 删除原有的节点
+      let currentStyle = document.getElementById('visualViews').contentWindow.document.getElementById("css_id")
+      if(currentStyle !== null) {
+			  document.getElementById('visualViews').contentWindow.document.body.removeChild(currentStyle);
+      }
+      // 新增节点
+			document.getElementById('visualViews').contentWindow.document.body.appendChild(style);
+			// this.fileInfo();
 		},
 		// 下载文件
 		downloadCss() {
@@ -376,7 +398,7 @@ export default {
 					  	document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.currentClass).style.outline = 'none'
 					  	document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = 'red solid 2px'
               that.activeCssMap = new CssMap(e.target.className)
-              that.settingInit(this.activeClass)
+              that.settingInit(e.target.className)
 
             }
 					});
@@ -384,7 +406,8 @@ export default {
 				};
 				reader.onloadend = function () {
 					that.addSpacingjs();
-					document.getElementById('visualViews').contentWindow.document.close();
+          // 关闭后就操作不了dom了
+					// document.getElementById('visualViews').contentWindow.document.close();
 				};
 			}
 		},

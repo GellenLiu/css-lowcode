@@ -22,7 +22,7 @@ export default class ClassMap {
   getContent() {
     let content = ''
     for(let item of this.data) {
-      content += item.getContent()
+      content += item[1].getContent()
     }
     console.log(content)
     return content;
