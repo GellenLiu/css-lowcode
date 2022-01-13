@@ -95,3 +95,10 @@ res[4]存储的就是字符串的内容
 包括Attention(晃动效果)、bounce(弹性缓冲效果)、fade(透明度变化效果)、flip(翻转效果)、rotate(旋转效果)、slide(滑动效果)、zoom(变焦效果)、special(特殊效果)
 
 .right .merchant-wrapper 
+
+
+遇到开始标签，创建新一层。遇到关闭就关闭。
+<html>
+  <body>
+  </body>
+</html>

@@ -126,7 +126,7 @@
 				<div class="edit-item edit-item-wrapper">
 					<label>颜色</label>
 					<el-input v-model="activeCssMap.fontColor" placeholder="请输入字体颜色"></el-input>
-					<el-color-picker v-model="activeCssMap.fontColorSelect"></el-color-picker>
+					<el-color-picker v-model="activeCssMap.color"></el-color-picker>
 				</div>
         <div class="edit-item">
 					<label>省略换行</label>
@@ -379,18 +379,11 @@ export default {
 		// 解析html文件
 		htmlAnalysis() {
 			console.log('解析');
-			this.fileInfo();
-			setTimeout(() => {
-				console.log(this.inputContent);
-			}, 100);
-
-			let views = document.getElementById('visualViews').contentWindow.document;
+      this.fileInfo()
+			let documentText = document.getElementById('visualViews').contentWindow.document;
 			// 正则匹配元素标签
-
-			let test = document.getElementById('visualViews').contentWindow.document.getElementById('test');
-			console.log(test.offsetWidth);
-
-			test.style.border = '#fff solid 3px';
+      let childNodes = documentText.documentElement.childNodes
+      console.log(childNodes)
 		},
 		// 添加spacingjs,测量边距
 		addSpacingjs() {
@@ -431,6 +424,23 @@ export default {
             }
 					});
 					that.inputContent = fileContent;
+          console.log(fileContent)
+          function parseNode(node) {
+            for(let nodeItem of node.childNodes) {
+              if(nodeItem !== 'text') {
+                console.log(nodeItem)
+              }
+              if(nodeItem.childNodes.length !== 0) {
+                parseNode(nodeItem)
+              }
+            }
+          }
+          // 节点树解析
+			    let documentText = document.getElementById('visualViews').contentWindow.document;
+          let htmlNode = documentText.documentElement
+          parseNode(htmlNode)
+          console.log(htmlNode)
+          // this.htmlAnalysis()
 				};
 				reader.onloadend = function () {
 					that.addSpacingjs();
