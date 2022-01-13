@@ -16,6 +16,7 @@ iframe {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  flex-shrink: 0;
   height: 50px;
   width: 100%;
   padding: 0 14px;
@@ -39,4 +40,6 @@ iframe {
 #app {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  height: 100vh;
 }
