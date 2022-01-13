@@ -12,14 +12,16 @@ iframe {
 	margin: 20px auto;
 }
 .home-page {
-	position: fixed;
-	left: 0;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	margin: 50px 200px 0 200px;
-	height: 100vh;
-	width: calc(100vw-400px);
+	// position: fixed;
+	// left: 0;
+	// top: 0;
+	// right: 0;
+	// bottom: 0;
+	// margin: 50px 200px 0 200px;
+	// height: 100vh;
+	// width: calc(100vw-400px);
+  display: flex;
+  flex: 1;
 }
 .header {
 	display: flex;
@@ -28,11 +30,11 @@ iframe {
 	background-color: rgba($color: white, $alpha: 0.5);
 }
 .tools-wrapper {
+  flex-shrink: 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	border: #eef0f6 solid 2px;
-	// width: 239px;
 	width: 100%;
 	height: 46px;
 	margin-bottom: 10px;
@@ -51,22 +53,28 @@ iframe {
 .tools {
 	display: flex;
 	justify-content: flex-start;
-	position: fixed;
+  align-items: flex-start;
+	// position: fixed;
 	flex-direction: column;
-	left: 0;
-	top: 50px;
-	bottom: 0;
-	flex-wrap: wrap;
-	width: 200px;
+	// left: 0;
+	// top: 50px;
+	// bottom: 0;
+	// flex-wrap: wrap;
+	width: 240px;
 	background-color: white;
 	z-index: 9;
+  overflow-y: auto;
+  // overflow-x: hidden;
+}
+.tools::-webkit-scrollbar {
+  display: none;
 }
 .tools-list {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-start;
 	align-items: flex-start;
-	width: 200px;
+	width: 240px;
 }
 .tools-list-item,
 .tools-list-item img {
@@ -78,10 +86,17 @@ iframe {
 }
 .components-list {
 	display: flex;
+  flex: 1;
 	flex-wrap: wrap;
 	justify-content: flex-start;
 	align-items: flex-start;
-	width: 200px;
+	width: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+}
+.components-list ::-webkit-scrollbar {
+  display: none;
 }
 .components-list-item {
 	height: 80px;
@@ -102,8 +117,8 @@ iframe {
   flex: 1;
 	flex-direction: column;
 	justify-content: center;
-	width: calc(100vw - 400px);
-	height: calc(100vh - 50px);
+	// width: calc(100vw - 400px);
+	// height: calc(100vh - 50px);
 	background-color: #f5f7fa;
 	overflow: auto;
 }
@@ -129,8 +144,9 @@ iframe {
 }
 #fileContent {
   position: absolute;
-  right: 150px;
+  right: 10px;
   top: 10px;
+  width: 190px;
 }
 .views-scale {
 	position: fixed;
@@ -165,10 +181,10 @@ iframe {
 #fileContent {
 }
 .edit {
-	position: fixed;
-	right: 0;
-	top: 50px;
-	bottom: 0;
+	// position: fixed;
+	// right: 0;
+	// top: 50px;
+	// bottom: 0;
 	width: 320px;
 	padding: 16px 24px;
 	font-size: 12px;

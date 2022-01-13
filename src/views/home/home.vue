@@ -3,10 +3,10 @@
 		<!-- 工具栏 -->
 		<div class="tools">
 			<div class="tools-wrapper">
-				<div class="tools-list-tab" :class="!active ? 'tab-active' : ''" @click="switchTab(0)">工具</div>
-				<div class="components-list-tab" :class="active ? 'tab-active' : ''" @click="switchTab(1)">组件</div>
+				<div class="tools-list-tab" :class="!active ? 'tab-active' : ''" @click="switchTab(0)">结构</div>
+				<div class="components-list-tab" :class="active ? 'tab-active' : ''" @click="switchTab(1)">工具</div>
 			</div>
-			<div class="tools-list" v-if="!active">
+			<div class="tools-list" v-if="active">
 				<div class="tools-list-item"><img src="@/assets/ruler.png" /></div>
 				<div class="tools-list-item" @click="getBase64">
 					<img src="@/assets/toBase64.png" />
@@ -18,25 +18,31 @@
 				<!-- 配色表 -->
 				<div class="tools-list-item"><img src="@/assets/getColor.png" /></div>
 			</div>
-			<div class="components-list" v-if="active">
-				<div class="components-list-item">
-					<img src="@/assets/picture.png" />
-				</div>
-				<div class="components-list-item">
-					<img src="@/assets/select-btn.png" />
-				</div>
-				<div class="components-list-item">
-					<img src="@/assets/btn-open.png" />
-				</div>
-				<div class="components-list-item">
-					<img src="@/assets/drop-down.png" />
-				</div>
-				<div class="components-list-item">
-					<img src="@/assets/line-div.png" />
-				</div>
-				<div class="components-list-item">
-					<img src="@/assets/row-div.png" />
-				</div>
+			<!-- dom结构树 -->
+			<div class="components-list" v-else>
+				<el-menu default-active="2" class="el-menu-vertical-demo">
+					<el-submenu index="1" v-for="{index, node} in htmlTree" :key="index">
+						<template slot="title">
+							<i class="el-icon-menu"></i>
+							<span>{{node}}</span>
+						</template>
+						<el-submenu index="1-2">
+              <template slot="title">
+							<i class="el-icon-menu"></i>
+							<span>1</span>
+						</template>
+            </el-submenu>
+						<el-menu-item index="1-3">2</el-menu-item>
+						<el-submenu index="1-4">
+							<template slot="title">3</template>
+							<el-menu-item index="1-4-1">4</el-menu-item>
+							<el-submenu index="1-4">
+								<template slot="title">5</template>
+								<el-menu-item index="1-4-1">6</el-menu-item>
+							</el-submenu>
+						</el-submenu>
+					</el-submenu>
+				</el-menu>
 			</div>
 		</div>
 
@@ -55,10 +61,10 @@
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
+			<input id="fileContent" type="file" />
 			<!-- 视图栏 -->
 			<div class="views">
 				<iframe :class="command" ref="visualViews" id="visualViews" height="500px" width="300px"></iframe>
-				<input id="fileContent" type="file" />
 			</div>
 			<!-- 视图缩放 -->
 			<div class="views-scale">
@@ -128,10 +134,10 @@
 					<el-input v-model="activeCssMap.fontColor" placeholder="请输入字体颜色"></el-input>
 					<el-color-picker v-model="activeCssMap.color"></el-color-picker>
 				</div>
-        <div class="edit-item">
+				<div class="edit-item">
 					<label>省略换行</label>
 					<el-dropdown @command="selectText">
-					  <span class="el-dropdown-link">
+						<span class="el-dropdown-link">
 							自动换行
 							<i class="el-icon-arrow-down el-icon--right"></i>
 						</span>
@@ -174,15 +180,15 @@
 				<el-button :class="command" type="success" @click="run">运行</el-button>
 				<el-button type="success" @click="downloadCss">下载保存</el-button>
 			</div>
-      <!-- 源代码 -->
+			<!-- 源代码 -->
 			<div v-else>
 				<div class="source-code">
-          <div class="checkTitle">.{{ this.checkTitle }}</div>
+					<div class="checkTitle">.{{ this.checkTitle }}</div>
 					<el-checkbox-group v-model="checkedList">
 						<el-checkbox v-for="checkitem in checkList" :label="checkitem" :key="checkitem">
-              <span>{{checkitem.attri}}</span>
-              :{{checkitem.value}}
-            </el-checkbox>
+							<span>{{ checkitem.attri }}</span>
+							:{{ checkitem.value }}
+						</el-checkbox>
 					</el-checkbox-group>
 				</div>
 			</div>
@@ -210,12 +216,13 @@ export default {
 			base64: '',
 			classMap: new ClassMap(), //文件所有class
 			inputContent: '',
-      checkTitle: '',
+			checkTitle: '',
 			checkList: [], // 源代码调试
-      checkedList: [],
-      activeCssMap: new CssMap(),
-      activeClass: '',//选择红框
-      currentClass: ''
+			checkedList: [],
+			activeCssMap: new CssMap(),
+			activeClass: '', //选择红框
+			currentClass: '',
+      htmlTree: []  //dom树解析
 		};
 	},
 	mounted() {
@@ -226,20 +233,20 @@ export default {
 		});
 		this.addSpacingjs();
 		// this.getDomNode();
-    this.settingInit()
-    document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes/100})`
+		this.settingInit();
+		document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes / 100})`;
 	},
 	methods: {
-    // 源代码调试
-     handleCheckAllChange(val) {
-        this.checkedCities = val ? cityOptions : [];
-        this.isIndeterminate = false;
-      },
-      handleCheckedCitiesChange(value) {
-        let checkedCount = value.length;
-        this.checkAll = checkedCount === this.cities.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
-      },
+		// 源代码调试
+		handleCheckAllChange(val) {
+			this.checkedCities = val ? cityOptions : [];
+			this.isIndeterminate = false;
+		},
+		handleCheckedCitiesChange(value) {
+			let checkedCount = value.length;
+			this.checkAll = checkedCount === this.cities.length;
+			this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+		},
 		// tab切换
 		switchTab(index) {
 			if (index == 0) {
@@ -275,95 +282,95 @@ export default {
 				this.currentPhone = 'iphone X (375 x 812)';
 			}
 		},
-    reduceScale() {
-      this.scaleTimes -= 10;
-      document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes/100})`
-    },
-    increaseScale() {
-      this.scaleTimes += 10;
-      document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes/100})`
-    },
-    cssInput() {
-      // console.log(this.activeCssMap)
-      console.log(this.activeCssMap.getContent())
-    },
-    // 省略换行选择
-    selectText(command) {
-      this.command = command
-      switch (command) {
-        case 'ellipsis' : 
-          this.activeCssMap.setTextEllipsis();
-          break;
-        default : 
-          this.activeCssMap.setTextEllipsis();
-          break;
-      }
-    },
+		reduceScale() {
+			this.scaleTimes -= 10;
+			document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes / 100})`;
+		},
+		increaseScale() {
+			this.scaleTimes += 10;
+			document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes / 100})`;
+		},
+		cssInput() {
+			// console.log(this.activeCssMap)
+			console.log(this.activeCssMap.getContent());
+		},
+		// 省略换行选择
+		selectText(command) {
+			this.command = command;
+			switch (command) {
+				case 'ellipsis':
+					this.activeCssMap.setTextEllipsis();
+					break;
+				default:
+					this.activeCssMap.setTextEllipsis();
+					break;
+			}
+		},
 		// 添加动画
 		addAnimate(command) {
 			console.log(command);
 			// 要加animate__animated 才生效
 			this.command = 'animate__animated ' + command;
-      this.activeCssMap.animate = 'bounce 2s';
+			this.activeCssMap.animate = 'bounce 2s';
 		},
 		// 重置css设置选项,遍历cssmap
 		settingInit(className = '') {
-      let style =  document.getElementById('visualViews').contentWindow.document.querySelector('style')
-      console.log(style)
-      // let base =  style.indexOf(className) 
-      // 保存上次的设置
-      this.classMap.setClass(className, this.activeCssMap)
-      // 更新新选择的模块设置
-      this.activeCssMap = this.classMap.getClassContent(className)
-      // 更新源代码编辑
-      this.checkedList = []
-      this.checkList = []
-      for (let key in this.activeCssMap) {
-        console.log(this.activeCssMap)
-        if(key === 'className') {
-          this.checkTitle = this.activeCssMap[key];
-        } else {
-          let attributeMap = {
-            attri: '',
-            value: ''
-          }
-          attributeMap.attri = key;
-          attributeMap.value = this.activeCssMap[key]
-          this.checkList.push(attributeMap)
-          // console.log("attr:" + attributeMap[0]+":"+attributeMap[1])
-          console.log(attributeMap)
-          // this.checkedList.push(key)
-        }
-      }
-    },
-    // 添加样式到对应class
+			let style = document.getElementById('visualViews').contentWindow.document.querySelector('style');
+			console.log(style);
+			// let base =  style.indexOf(className)
+			// 保存上次的设置
+			this.classMap.setClass(className, this.activeCssMap);
+			// 更新新选择的模块设置
+			this.activeCssMap = this.classMap.getClassContent(className);
+			// 更新源代码编辑
+			this.checkedList = [];
+			this.checkList = [];
+			for (let key in this.activeCssMap) {
+				console.log(this.activeCssMap);
+				if (key === 'className') {
+					this.checkTitle = this.activeCssMap[key];
+				} else {
+					let attributeMap = {
+						attri: '',
+						value: ''
+					};
+					attributeMap.attri = key;
+					attributeMap.value = this.activeCssMap[key];
+					this.checkList.push(attributeMap);
+					// console.log("attr:" + attributeMap[0]+":"+attributeMap[1])
+					console.log(attributeMap);
+					// this.checkedList.push(key)
+				}
+			}
+		},
+		// 添加样式到对应class
 		run() {
 			console.log('添加样式到对应class,写入style标签');
-      if(this.classMap.hasClass(this.activeClass)) {
-        this.classMap.setClass(this.activeClass, this.activeCssMap)
-      } else {
-        this.classMap.addClass(this.activeClass, this.activeCssMap)
-      }
-      console.log(this.classMap)
+			if (this.classMap.hasClass(this.activeClass)) {
+				this.classMap.setClass(this.activeClass, this.activeCssMap);
+			} else {
+				this.classMap.addClass(this.activeClass, this.activeCssMap);
+			}
+			console.log(this.classMap);
 			let views = document.getElementById('visualViews').contentWindow.document;
-      console.log(views.body)
+			console.log(views.body);
 			let style = document.createElement('style');
-      style.id = "css_id"
+			style.id = 'css_id';
 			style.innerText = this.classMap.getContent();
-      console.log(style)
-      // 删除原有的节点
-      let currentStyle = document.getElementById('visualViews').contentWindow.document.getElementById("css_id")
-      if(currentStyle !== null) {
-			  document.getElementById('visualViews').contentWindow.document.body.removeChild(currentStyle);
-      }
-      // 新增节点
+			console.log(style);
+			// 删除原有的节点
+			let currentStyle = document.getElementById('visualViews').contentWindow.document.getElementById('css_id');
+			if (currentStyle !== null) {
+				document.getElementById('visualViews').contentWindow.document.body.removeChild(currentStyle);
+			}
+			// 新增节点
 			document.getElementById('visualViews').contentWindow.document.body.appendChild(style);
-      this.settingInit()
+			this.settingInit();
 			// this.fileInfo();
 		},
 		// 下载文件
 		downloadCss() {
-      let content = this.classMap.getContent()
+			let content = this.classMap.getContent();
 			this.download(content, 'index.css');
 		},
 		download(content, filename) {
@@ -379,11 +386,7 @@ export default {
 		// 解析html文件
 		htmlAnalysis() {
 			console.log('解析');
-      this.fileInfo()
-			let documentText = document.getElementById('visualViews').contentWindow.document;
-			// 正则匹配元素标签
-      let childNodes = documentText.documentElement.childNodes
-      console.log(childNodes)
+			this.fileInfo();
 		},
 		// 添加spacingjs,测量边距
 		addSpacingjs() {
@@ -406,45 +409,44 @@ export default {
 				let that = this;
 				reader.onload = function (e) {
 					fileContent = e.target.result;
-          // 写入内容
+					// 写入内容
 					document.getElementById('visualViews').contentWindow.document.write(fileContent);
-          // 添加点击事件
+					// 添加点击事件
 					document.getElementById('visualViews').contentWindow.document.addEventListener('click', function (e) {
-						console.log("class:" + e.target.className);
-            if(e.target.className === '') {
-              console.log("the class is empty!")
-            } else {
-              this.currentClass = this.activeClass
-              this.activeClass = e.target.className
-					  	document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.currentClass).style.outline = 'none'
-					  	document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = 'red solid 2px'
-              that.activeCssMap = new CssMap(e.target.className)
-              that.settingInit(e.target.className)
-
-            }
+						console.log('class:' + e.target.className);
+						if (e.target.className === '') {
+							console.log('the class is empty!');
+						} else {
+							this.currentClass = this.activeClass;
+							this.activeClass = e.target.className;
+							document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.currentClass).style.outline = 'none';
+							document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = 'red solid 2px';
+							that.activeCssMap = new CssMap(e.target.className);
+							that.settingInit(e.target.className);
+						}
 					});
 					that.inputContent = fileContent;
-          console.log(fileContent)
-          function parseNode(node) {
-            for(let nodeItem of node.childNodes) {
-              if(nodeItem !== 'text') {
-                console.log(nodeItem)
-              }
-              if(nodeItem.childNodes.length !== 0) {
-                parseNode(nodeItem)
-              }
-            }
-          }
-          // 节点树解析
-			    let documentText = document.getElementById('visualViews').contentWindow.document;
-          let htmlNode = documentText.documentElement
-          parseNode(htmlNode)
-          console.log(htmlNode)
-          // this.htmlAnalysis()
+					console.log(fileContent);
+					function parseNode(node) {
+						for (let nodeItem of node.childNodes) {
+							if (Object.prototype.toString.call(nodeItem).match(/\[object (.*?)\]/)[1] !== 'Text') {
+								that.htmlTree.push(nodeItem.nodeName + "." + nodeItem.className)
+							}
+							if (nodeItem.childNodes.length !== 0) {
+								parseNode(nodeItem);
+							}
+						}
+					}
+					// 节点树解析
+					let documentText = document.getElementById('visualViews').contentWindow.document;
+					let htmlNode = documentText.documentElement;
+					parseNode(htmlNode);
+					console.log(that.htmlTree);
+					// this.htmlAnalysis()
 				};
 				reader.onloadend = function () {
 					that.addSpacingjs();
-          // 关闭后就操作不了dom了
+					// 关闭后就操作不了dom了
 					// document.getElementById('visualViews').contentWindow.document.close();
 				};
 			}

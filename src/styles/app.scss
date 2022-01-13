@@ -36,3 +36,7 @@ iframe {
   z-index: 98;
   height: 100%;
 }
+#app {
+  display: flex;
+  flex-direction: column;
+}
