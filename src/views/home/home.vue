@@ -19,29 +19,9 @@
 				<div class="tools-list-item"><img src="@/assets/getColor.png" /></div>
 			</div>
 			<!-- dom结构树 -->
-			<div class="components-list" v-else>
-				<el-menu default-active="2" class="el-menu-vertical-demo">
-					<el-submenu index="1" v-for="{index, node} in htmlTree" :key="index">
-						<template slot="title">
-							<i class="el-icon-menu"></i>
-							<span>{{node}}</span>
-						</template>
-						<el-submenu index="1-2">
-              <template slot="title">
-							<i class="el-icon-menu"></i>
-							<span>1</span>
-						</template>
-            </el-submenu>
-						<el-menu-item index="1-3">2</el-menu-item>
-						<el-submenu index="1-4">
-							<template slot="title">3</template>
-							<el-menu-item index="1-4-1">4</el-menu-item>
-							<el-submenu index="1-4">
-								<template slot="title">5</template>
-								<el-menu-item index="1-4-1">6</el-menu-item>
-							</el-submenu>
-						</el-submenu>
-					</el-submenu>
+			<div class="components-list" @click="selectModule" v-else>
+				<el-menu :unique-opened="true" :default-active="activeIndex" @open="handleOpen" @close="handleClose" >
+					<menutree :data="htmlTree"></menutree>
 				</el-menu>
 			</div>
 		</div>
@@ -203,6 +183,7 @@ import ClassMap from '@/object/classMap.js';
 import CssMap from '@/object/cssMap.js';
 import toBase64Dialog from './module/toBase64Dialog';
 import ToBase64Dialog from './module/toBase64Dialog.vue';
+import menutree from '@/components/menuTree.vue';
 export default {
 	components: { toBase64Dialog, ToBase64Dialog },
 	data() {
@@ -222,8 +203,12 @@ export default {
 			activeCssMap: new CssMap(),
 			activeClass: '', //选择红框
 			currentClass: '',
-      htmlTree: []  //dom树解析
+			htmlTree: [], //dom树解析
+			activeIndex: '1'
 		};
+	},
+	components: {
+		menutree
 	},
 	mounted() {
 		let that = this;
@@ -237,6 +222,21 @@ export default {
 		document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes / 100})`;
 	},
 	methods: {
+    // 侧边栏折叠
+    handleOpen(key, keyPath) {
+      console.log(key,keyPath)
+    },
+    handleClose(key,keyPath) {
+      console.log(key + keyPath)
+    },
+    // 事件委托,结构选择
+    selectModule(e) {
+      console.log(e.target.innerText)
+      this.currentClass = this.activeClass;
+			this.activeClass = e.target.innerText;
+      document.getElementById('visualViews').contentWindow.document.querySelector(this.currentClass).style.outline = 'none';
+			document.getElementById('visualViews').contentWindow.document.querySelector(this.activeClass).style.outline = 'red solid 2px';
+    },
 		// 源代码调试
 		handleCheckAllChange(val) {
 			this.checkedCities = val ? cityOptions : [];
@@ -427,20 +427,34 @@ export default {
 					});
 					that.inputContent = fileContent;
 					console.log(fileContent);
-					function parseNode(node) {
+          var totalIndex = 0
+					function parseNode(node, list = that.htmlTree) {
 						for (let nodeItem of node.childNodes) {
+							let nodeObj = {
+								id: totalIndex,
+								name: '首页',
+								path: totalIndex,
+								icon: 'icon_hrIndex.png',
+								children: []
+							};
+							totalIndex++;
 							if (Object.prototype.toString.call(nodeItem).match(/\[object (.*?)\]/)[1] !== 'Text') {
-								that.htmlTree.push(nodeItem.nodeName + "." + nodeItem.className)
+								if (nodeItem.className !== '') {
+									nodeObj.name = nodeItem.nodeName + '.' + nodeItem.className;
+								} else {
+									nodeObj.name = nodeItem.nodeName;
+								}
+								list.push(nodeObj);
 							}
 							if (nodeItem.childNodes.length !== 0) {
-								parseNode(nodeItem);
+								parseNode(nodeItem, nodeObj.children);
 							}
 						}
 					}
 					// 节点树解析
 					let documentText = document.getElementById('visualViews').contentWindow.document;
 					let htmlNode = documentText.documentElement;
-					parseNode(htmlNode);
+					parseNode(htmlNode, this.htmlTree);
 					console.log(that.htmlTree);
 					// this.htmlAnalysis()
 				};
