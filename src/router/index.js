@@ -20,6 +20,10 @@ const router = new Router({
       path: '/home',
       component: () => import('@/views/home/home'),
     },
+    {
+      path: '/mine',
+      component: () => import('@/views/mine/mine'),
+    },
   ]
 })
 export default router

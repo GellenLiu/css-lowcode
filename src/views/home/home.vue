@@ -220,7 +220,8 @@ export default {
 		this.addSpacingjs();
 		this.settingInit();
 		document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes / 100})`;
-    this.dragInput()
+    this.dragInput();
+    this.classMapInit()
 	},
 	methods: {
 		// 侧边栏折叠
@@ -522,7 +523,11 @@ export default {
 		closedialog(a) {
 			console.log('close dialog');
 			this.show64Dialog = false;
-		}
+		},
+    // 初始化classMap
+    classMapInit() {
+
+    }
 	}
 };
 </script>

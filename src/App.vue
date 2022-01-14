@@ -2,7 +2,7 @@
   <div id="app">
     <div class="header">
       <div class="my-avator"><img src="@/assets/default-avator.png"/></div>
-      <div class="my-text">个人中心</div>
+      <div class="my-text" @click="goMyCenter">个人中心</div>
     </div>
     <router-view></router-view>
   </div>
@@ -13,7 +13,12 @@
 export default {
   name: 'App',
   components: {
-  }
+  },
+  methods: {
+    goMyCenter() {
+      this.$router.push('/mine')
+    }
+  },
 }
 </script>
 
