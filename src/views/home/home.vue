@@ -318,13 +318,15 @@ export default {
 		},
 		// 重置css设置选项,遍历cssmap
 		settingInit(className = '') {
-			let style = document.getElementById('visualViews').contentWindow.document.querySelector('style');
+			let style = document.getElementById('visualViews').contentWindow.document.querySelector('#css_id');
 			console.log(style);
 			// let base =  style.indexOf(className)
 			// 保存上次的设置
 			this.classMap.setClass(className, this.activeCssMap);
 			// 更新新选择的模块设置
 			this.activeCssMap = this.classMap.getClassContent(className);
+      console.log("classMap:")
+      console.log(this.classMap)
 			// 更新源代码编辑
 			this.checkedList = [];
 			this.checkList = [];
@@ -368,7 +370,7 @@ export default {
 			}
 			// 新增节点
 			document.getElementById('visualViews').contentWindow.document.body.appendChild(style);
-			this.settingInit();
+			this.settingInit(this.activeClass);
 			// this.fileInfo();
 		},
 		// 下载文件
@@ -449,8 +451,12 @@ export default {
 							this.activeClass = e.target.className;
 							document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.currentClass).style.outline = 'none';
 							document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = 'red solid 2px';
-							that.activeCssMap = new CssMap(e.target.className);
-							that.settingInit(e.target.className);
+              if(that.classMap.hasClass(e.target.className)) {
+                that.activeCssMap = that.classMap.getClassContent(e.target.className)
+              } else {
+							  that.activeCssMap = new CssMap(e.target.className);
+              }
+							that.settingInit(e.target.className); 
 						}
 					});
 					that.inputContent = fileContent;
@@ -484,7 +490,6 @@ export default {
 					let htmlNode = documentText.documentElement;
 					parseNode(htmlNode, this.htmlTree);
 					console.log(that.htmlTree);
-					// this.htmlAnalysis()
 				};
 				reader.onloadend = function () {
 					that.addSpacingjs();
