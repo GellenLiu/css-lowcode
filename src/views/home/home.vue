@@ -20,7 +20,7 @@
 			</div>
 			<!-- dom结构树 -->
 			<div class="components-list" @click="selectModule" v-else>
-				<el-menu :unique-opened="true" :default-active="activeIndex" @open="handleOpen" @close="handleClose" >
+				<el-menu :unique-opened="true" :default-active="activeIndex" @open="handleOpen" @close="handleClose">
 					<menutree :data="htmlTree"></menutree>
 				</el-menu>
 			</div>
@@ -214,29 +214,32 @@ export default {
 		let that = this;
 		document.getElementById('fileContent').addEventListener('change', function () {
 			console.log('input事件监听');
-			that.htmlAnalysis();
+			let resultFile = document.getElementById('fileContent').files[0];
+			that.fileInfo(resultFile);
 		});
 		this.addSpacingjs();
-		// this.getDomNode();
 		this.settingInit();
 		document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes / 100})`;
+    this.dragInput()
 	},
 	methods: {
-    // 侧边栏折叠
-    handleOpen(key, keyPath) {
-      console.log(key,keyPath)
-    },
-    handleClose(key,keyPath) {
-      console.log(key + keyPath)
-    },
-    // 事件委托,结构选择
-    selectModule(e) {
-      console.log(e.target.innerText)
-      this.currentClass = this.activeClass;
-			this.activeClass = e.target.innerText;
-      document.getElementById('visualViews').contentWindow.document.querySelector(this.currentClass).style.outline = 'none';
-			document.getElementById('visualViews').contentWindow.document.querySelector(this.activeClass).style.outline = 'red solid 2px';
-    },
+		// 侧边栏折叠
+		handleOpen(key, keyPath) {
+			console.log(key, keyPath);
+		},
+		handleClose(key, keyPath) {
+			console.log(key + keyPath);
+		},
+		// 事件委托,结构选择
+		selectModule(e) {
+			console.log(e.target.innerText);
+			this.currentClass = this.activeClass;
+			this.activeClass = e.target.innerText.substring(e.target.innerText.indexOf('.') + 1);
+			document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.currentClass).style.outline = 'none';
+			document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = 'red solid 2px';
+			this.activeCssMap = new CssMap(this.activeClass);
+			this.settingInit(this.activeClass);
+		},
 		// 源代码调试
 		handleCheckAllChange(val) {
 			this.checkedCities = val ? cityOptions : [];
@@ -383,11 +386,6 @@ export default {
 			eleLink.click();
 			document.body.removeChild(eleLink);
 		},
-		// 解析html文件
-		htmlAnalysis() {
-			console.log('解析');
-			this.fileInfo();
-		},
 		// 添加spacingjs,测量边距
 		addSpacingjs() {
 			var spacingjs = document.createElement('script');
@@ -398,8 +396,38 @@ export default {
 		removeSpacingjs() {
 			document.getElementById('visualViews').contentWindow.document.body.removeChild(spacingjs);
 		},
-		fileInfo() {
-			let resultFile = document.getElementById('fileContent').files[0];
+		// 拖拽方式导入文件
+		dragInput() {
+      let that = this;
+			window.onload = function (ev) {
+				var container = document.getElementById('visualViews').contentWindow.document;
+				container.ondragenter = function () {
+          console.log("ondragenter")
+        };
+				container.ondragover = function (e) {
+          console.log("ondragover")
+					//关闭默认事件
+					e.stopPropagation();
+					e.preventDefault();
+					//设置获取模式，为复制
+					e.dataTransfer.dropEffect = 'copy';
+				};
+				container.ondragleave = function () {
+          console.log("ondragleave")
+        };
+				container.ondrop = function (e) {
+          console.log("ondrop")
+					e.stopPropagation();
+					e.preventDefault();
+					var file = e.dataTransfer.files;
+					var file_name = file[0].name;
+					console.log(file_name);
+          that.fileInfo(file[0])
+				};
+			};
+		},
+		fileInfo(resultFile) {
+			// let resultFile = document.getElementById('fileContent').files[0];
 			if (resultFile) {
 				this.file = resultFile;
 				this.fileName = resultFile.name;
@@ -427,7 +455,7 @@ export default {
 					});
 					that.inputContent = fileContent;
 					console.log(fileContent);
-          var totalIndex = 0
+					var totalIndex = 0;
 					function parseNode(node, list = that.htmlTree) {
 						for (let nodeItem of node.childNodes) {
 							let nodeObj = {
