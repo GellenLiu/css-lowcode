@@ -114,6 +114,28 @@
 					<el-input v-model="activeCssMap.fontColor" placeholder="请输入字体颜色"></el-input>
 					<el-color-picker v-model="activeCssMap.color"></el-color-picker>
 				</div>
+				<div class="edit-item edit-item-wrapper">
+					<label>图片设置</label>
+					<div class="picture-wrapper">
+						<el-upload
+							:limit="1"
+							:drag="true"
+							:on-progress="selectPic"
+							action="https://jsonplaceholder.typicode.com/posts/"
+							list-type="picture-card"
+							:on-preview="handlePictureCardPreview"
+							:on-remove="handleRemove"
+						>
+							<i class="el-icon-plus"></i>
+						</el-upload>
+						<el-dialog :visible.sync="dialogVisible">
+							<img width="100%" :src="dialogImageUrl" alt="" />
+						</el-dialog>
+					</div>
+				</div>
+				<div class="edit-item">
+					<label>图片名称： <span>{{ fileList }}</span></label>
+				</div>
 				<div class="edit-item">
 					<label>省略换行</label>
 					<el-dropdown @command="selectText">
@@ -204,7 +226,10 @@ export default {
 			activeClass: '', //选择红框
 			currentClass: '',
 			htmlTree: [], //dom树解析
-			activeIndex: '1'
+			activeIndex: '1',
+			dialogImageUrl: '',
+			dialogVisible: false,
+			fileList: ''
 		};
 	},
 	components: {
@@ -220,10 +245,22 @@ export default {
 		this.addSpacingjs();
 		this.settingInit();
 		document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes / 100})`;
-    this.dragInput();
-    this.classMapInit()
+		this.dragInput();
+		this.classMapInit();
 	},
 	methods: {
+		//图片设置
+		handleRemove(file, fileList) {
+			console.log(file, fileList);
+		},
+		handlePictureCardPreview(file) {
+			console.log(2);
+			this.dialogImageUrl = file.url;
+			this.dialogVisible = true;
+		},
+		selectPic(event, file, fileList) {
+			this.fileList = file.name;
+		},
 		// 侧边栏折叠
 		handleOpen(key, keyPath) {
 			console.log(key, keyPath);
@@ -326,8 +363,8 @@ export default {
 			this.classMap.setClass(className, this.activeCssMap);
 			// 更新新选择的模块设置
 			this.activeCssMap = this.classMap.getClassContent(className);
-      console.log("classMap:")
-      console.log(this.classMap)
+			console.log('classMap:');
+			console.log(this.classMap);
 			// 更新源代码编辑
 			this.checkedList = [];
 			this.checkList = [];
@@ -401,14 +438,14 @@ export default {
 		},
 		// 拖拽方式导入文件
 		dragInput() {
-      let that = this;
+			let that = this;
 			window.onload = function (ev) {
 				var container = document.getElementById('visualViews').contentWindow.document;
 				container.ondragenter = function () {
-          console.log("ondragenter")
-        };
+					console.log('ondragenter');
+				};
 				container.ondragover = function (e) {
-          console.log("ondragover")
+					console.log('ondragover');
 					//关闭默认事件
 					e.stopPropagation();
 					e.preventDefault();
@@ -416,16 +453,16 @@ export default {
 					e.dataTransfer.dropEffect = 'copy';
 				};
 				container.ondragleave = function () {
-          console.log("ondragleave")
-        };
+					console.log('ondragleave');
+				};
 				container.ondrop = function (e) {
-          console.log("ondrop")
+					console.log('ondrop');
 					e.stopPropagation();
 					e.preventDefault();
 					var file = e.dataTransfer.files;
 					var file_name = file[0].name;
 					console.log(file_name);
-          that.fileInfo(file[0])
+					that.fileInfo(file[0]);
 				};
 			};
 		},
@@ -452,12 +489,12 @@ export default {
 							this.activeClass = e.target.className;
 							document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.currentClass).style.outline = 'none';
 							document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = 'red solid 2px';
-              if(that.classMap.hasClass(e.target.className)) {
-                that.activeCssMap = that.classMap.getClassContent(e.target.className)
-              } else {
-							  that.activeCssMap = new CssMap(e.target.className);
-              }
-							that.settingInit(e.target.className); 
+							if (that.classMap.hasClass(e.target.className)) {
+								that.activeCssMap = that.classMap.getClassContent(e.target.className);
+							} else {
+								that.activeCssMap = new CssMap(e.target.className);
+							}
+							that.settingInit(e.target.className);
 						}
 					});
 					that.inputContent = fileContent;
@@ -524,10 +561,8 @@ export default {
 			console.log('close dialog');
 			this.show64Dialog = false;
 		},
-    // 初始化classMap
-    classMapInit() {
-
-    }
+		// 初始化classMap
+		classMapInit() {}
 	}
 };
 </script>

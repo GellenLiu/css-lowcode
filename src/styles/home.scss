@@ -254,3 +254,16 @@ label {
 	padding: 10px;
 	box-sizing: border-box;
 }
+// 图片设置
+.picture-wrapper > div {
+  display: flex;
+}
+.el-upload-dragger {
+	width: 148px;
+	height: 148px;
+	border: none;
+	background: none;
+}
+label span {
+  text-decoration: underline;
+}
