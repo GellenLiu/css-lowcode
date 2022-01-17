@@ -254,6 +254,11 @@ label {
 	padding: 10px;
 	box-sizing: border-box;
 }
+//边距设置
+.edit-item .input-margin, .edit-item .input-padding {
+	overflow-x: hidden;
+	vertical-align: middle;
+}
 // 图片设置
 .picture-wrapper > div {
   display: flex;

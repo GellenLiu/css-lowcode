@@ -99,6 +99,14 @@
 					</div>
 				</div>
 				<div class="edit-item">
+					<label>外边距</label>
+					<el-input class="input-margin" v-model="activeCssMap.height" placeholder=""></el-input>
+				</div>
+				<div class="edit-item">
+					<label>内边距</label>
+					<el-input class="input-padding" v-model="activeCssMap.height" placeholder=""></el-input>
+				</div>
+				<div class="edit-item">
 					<label>圆角</label>
 					<el-input v-model="activeCssMap.borderRadius" placeholder="请输入圆角"></el-input>
 				</div>
@@ -115,26 +123,15 @@
 					<el-color-picker v-model="activeCssMap.color"></el-color-picker>
 				</div>
 				<div class="edit-item edit-item-wrapper">
-					<label>图片设置</label>
-					<div class="picture-wrapper">
-						<el-upload
-							:limit="1"
-							:drag="true"
-							:on-progress="selectPic"
-							action="https://jsonplaceholder.typicode.com/posts/"
-							list-type="picture-card"
-							:on-preview="handlePictureCardPreview"
-							:on-remove="handleRemove"
-						>
-							<i class="el-icon-plus"></i>
-						</el-upload>
-						<el-dialog :visible.sync="dialogVisible">
-							<img width="100%" :src="dialogImageUrl" alt="" />
-						</el-dialog>
+					<div class="text-aligh-icon">
+						<img src="@/assets/text-center-icon.png" />
 					</div>
-				</div>
-				<div class="edit-item">
-					<label>图片名称： <span>{{ fileList }}</span></label>
+					<div class="text-aligh-icon">
+						<img src="@/assets/text-left-iocn.png" />
+					</div>
+					<div class="text-aligh-icon">
+						<img src="@/assets/text-right-icon.png" />
+					</div>
 				</div>
 				<div class="edit-item">
 					<label>省略换行</label>
@@ -153,15 +150,45 @@
 					</el-dropdown>
 				</div>
 				<div class="edit-item edit-item-wrapper">
-					<div class="text-aligh-icon">
-						<img src="@/assets/text-center-icon.png" />
+					<label>图片设置</label>
+					<div class="picture-wrapper">
+						<el-upload
+							:limit="1"
+							:drag="true"
+							:on-success="selectPic"
+							action="https://jsonplaceholder.typicode.com/posts/"
+							list-type="picture-card"
+							:on-preview="handlePictureCardPreview"
+							:on-remove="handleRemove"
+						>
+							<i class="el-icon-plus"></i>
+						</el-upload>
+						<el-dialog :visible.sync="dialogVisible">
+							<img width="100%" :src="dialogImageUrl" alt="" />
+						</el-dialog>
 					</div>
-					<div class="text-aligh-icon">
-						<img src="@/assets/text-left-iocn.png" />
-					</div>
-					<div class="text-aligh-icon">
-						<img src="@/assets/text-right-icon.png" />
-					</div>
+				</div>
+				<div class="edit-item">
+					<label>
+						图片名称：
+						<span>{{ activeCssMap.backgroundImage }}</span>
+					</label>
+				</div>
+				<div class="edit-item">
+					<label>图片模式</label>
+					<el-dropdown @command="selectText">
+						<span class="el-dropdown-link">
+							fill
+							<i class="el-icon-arrow-down el-icon--right"></i>
+						</span>
+						<el-dropdown-menu slot="dropdown">
+							<el-dropdown-item command="contain">contain</el-dropdown-item>
+							<el-dropdown-item command="cover">cover</el-dropdown-item>
+							<el-dropdown-item command="fitWidth">fitWidth</el-dropdown-item>
+							<el-dropdown-item command="fitHeight">fitHeight</el-dropdown-item>
+							<el-dropdown-item command="repeat">repeat</el-dropdown-item>
+						</el-dropdown-menu>
+					</el-dropdown>
 				</div>
 				<div class="edit-item">
 					<label>添加动画</label>
@@ -178,6 +205,10 @@
 							<el-dropdown-item command="animate__fadeOutUp">向上消失</el-dropdown-item>
 						</el-dropdown-menu>
 					</el-dropdown>
+				</div>
+				<div class="edit-item">
+					<label>动画时长</label>
+					<el-input v-model="activeCssMap.className" placeholder=""></el-input>
 				</div>
 				<el-button :class="command" type="success" @click="run">运行</el-button>
 				<el-button type="success" @click="downloadCss">下载保存</el-button>
@@ -228,8 +259,7 @@ export default {
 			htmlTree: [], //dom树解析
 			activeIndex: '1',
 			dialogImageUrl: '',
-			dialogVisible: false,
-			fileList: ''
+			dialogVisible: false
 		};
 	},
 	components: {
@@ -249,6 +279,24 @@ export default {
 		this.classMapInit();
 	},
 	methods: {
+    // canvas 压缩图片
+    compressImage() {
+
+    },
+		// 图片上传CDN
+		putImgCDN(url,file) {
+      // 需要配置跨域访问
+      let AccessKey = 'AKID6W7c-uinfVQBF5TE5ztAYxS6St3RlcySSA8ZYflLLS6zW1F42jYOaooyCWGHW6R0';
+      let SecretKey = "4ZatXKEE33GXnk/y+hrQYK6R3bBRRQ0yXUnvq81AtQ4=";
+      let SessionToken = "ZniDSrt709rbILeb5q2ESrC3IbvzxWbae5787b1c3d2b057490dc9e71f844614bXo41xKKgiPhb2l-QzkIM3YqtBIATNsQjMwbLagggPw4GiX5ysGBLfdnNQWM55guwZxi9HKf5Z-SUqONs78c29AlvJr7KlqjxYG9LnLHQAeSXi7_qdscI2pJ1liv8WHqcIK6Gag_NsPrJUOFr1tpAdbCsWjegBi5TuIK0w-q85Nt3d0LMySWNwq1bZ91xFRsL7Fjo62r8wpLQyN0eM2NDgwOtfWwV6-icUcyIaQF6diKyGb-xL9AHp8QJCMuJm-wpOBfS8A8yZVLpBfxpRBx9eTVwxrty_5lr5wWPt3mYjrs"
+
+      let auth =  "Authorization: AWS " + AccessKey + ":" + SecretKey
+			var xhr = new XMLHttpRequest();
+			xhr.open('PUT', url, true);
+			xhr.setRequestHeader('Authorization', auth);
+      xhr.send(file)
+		},
+
 		//图片设置
 		handleRemove(file, fileList) {
 			console.log(file, fileList);
@@ -259,7 +307,8 @@ export default {
 			this.dialogVisible = true;
 		},
 		selectPic(event, file, fileList) {
-			this.fileList = file.name;
+			this.activeCssMap.backgroundImage = file.name;
+      this.putImgCDN("https://image-1251917893.cos.ap-guangzhou.myqcloud.com/imgOptimization/120.png",file)
 		},
 		// 侧边栏折叠
 		handleOpen(key, keyPath) {
