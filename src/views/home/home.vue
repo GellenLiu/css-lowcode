@@ -285,7 +285,7 @@ export default {
     },
 		// 图片上传CDN
 		putImgCDN(url,file) {
-      // 需要配置跨域访问
+      // 需要配置跨域访问、AWS签名认证(临时签名需要从后端动态获取)
       let AccessKey = 'AKID6W7c-uinfVQBF5TE5ztAYxS6St3RlcySSA8ZYflLLS6zW1F42jYOaooyCWGHW6R0';
       let SecretKey = "4ZatXKEE33GXnk/y+hrQYK6R3bBRRQ0yXUnvq81AtQ4=";
       let SessionToken = "ZniDSrt709rbILeb5q2ESrC3IbvzxWbae5787b1c3d2b057490dc9e71f844614bXo41xKKgiPhb2l-QzkIM3YqtBIATNsQjMwbLagggPw4GiX5ysGBLfdnNQWM55guwZxi9HKf5Z-SUqONs78c29AlvJr7KlqjxYG9LnLHQAeSXi7_qdscI2pJ1liv8WHqcIK6Gag_NsPrJUOFr1tpAdbCsWjegBi5TuIK0w-q85Nt3d0LMySWNwq1bZ91xFRsL7Fjo62r8wpLQyN0eM2NDgwOtfWwV6-icUcyIaQF6diKyGb-xL9AHp8QJCMuJm-wpOBfS8A8yZVLpBfxpRBx9eTVwxrty_5lr5wWPt3mYjrs"
