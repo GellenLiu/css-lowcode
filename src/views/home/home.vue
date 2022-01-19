@@ -40,6 +40,7 @@
 						<el-dropdown-item command="4">iphone X (375 x 812) | Dpr:3</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
+        <img src="@/assets/phoneRotate.png" @click="phoneRotate"/>
 			</div>
 			<input id="fileContent" type="file" />
 			<!-- 视图栏 -->
@@ -101,6 +102,13 @@
 				<div class="edit-item">
 					<label>外边距</label>
 					<el-input class="input-margin" v-model="activeCssMap.height" placeholder=""></el-input>
+          <div class="el-icon-circle-plus-outline" @click="expandMargin"></div>
+          <div class="input-margin-item" style="display: none;">
+            <el-input-number v-model="activeCssMap.marginTop" :precision="2" :step="0.1" :max="10"></el-input-number>
+            <el-input-number v-model="activeCssMap.marginRight" :precision="2" :step="0.1" :max="10"></el-input-number>
+            <el-input-number v-model="activeCssMap.marginBottom" :precision="2" :step="0.1" :max="10"></el-input-number>
+            <el-input-number v-model="activeCssMap.marginLeft" :precision="2" :step="0.1" :max="10"></el-input-number>
+          </div>
 				</div>
 				<div class="edit-item">
 					<label>内边距</label>
@@ -259,7 +267,8 @@ export default {
 			htmlTree: [], //dom树解析
 			activeIndex: '1',
 			dialogImageUrl: '',
-			dialogVisible: false
+			dialogVisible: false,
+      unflodMargin: false
 		};
 	},
 	components: {
@@ -279,6 +288,14 @@ export default {
 		this.classMapInit();
 	},
 	methods: {
+    expandMargin() {
+      if(this.unflodMargin) {
+        document.querySelector(".input-margin-item").style.display = "none"
+      } else {
+        document.querySelector(".input-margin-item").style.display = "block"
+      }
+      this.unflodMargin = !this.unflodMargin
+    },
     // canvas 压缩图片
     compressImage() {
 
@@ -372,6 +389,10 @@ export default {
 				this.currentPhone = 'iphone X (375 x 812)';
 			}
 		},
+    // 机型旋转
+    phoneRotate() {
+
+    },
 		reduceScale() {
 			this.scaleTimes -= 10;
 			document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes / 100})`;

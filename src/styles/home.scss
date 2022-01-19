@@ -131,6 +131,15 @@ iframe {
 	width: 200px;
 	height: 25px;
 }
+.phone-type img {
+	height: 20px;
+	width: 20px;
+	margin-left: 8px;
+	vertical-align: middle;
+}
+.phone-type img:hover {
+	background-color: #cccccc;
+}
 .views {
 	display: flex;
   flex: 1;
@@ -271,4 +280,18 @@ label {
 }
 label span {
   text-decoration: underline;
+}
+
+.edit-item .el-icon-circle-plus-outline, .el-button {
+	display: inline-block;
+	width: 40px;
+	margin-left: 10px;
+	height: 40px;
+}
+.el-input-number {
+	margin: 5px;
+	width: 140px;
+}
+.el-input-number .el-input {
+  height: 100%;
 }
