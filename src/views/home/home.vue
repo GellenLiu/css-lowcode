@@ -113,6 +113,13 @@
 				<div class="edit-item">
 					<label>内边距</label>
 					<el-input class="input-padding" v-model="activeCssMap.height" placeholder=""></el-input>
+          <div class="el-icon-circle-plus-outline" @click="expandMargin"></div>
+          <div class="input-margin-item" style="display: none;">
+            <el-input-number v-model="activeCssMap.marginTop" :precision="2" :step="0.1" :max="10"></el-input-number>
+            <el-input-number v-model="activeCssMap.marginRight" :precision="2" :step="0.1" :max="10"></el-input-number>
+            <el-input-number v-model="activeCssMap.marginBottom" :precision="2" :step="0.1" :max="10"></el-input-number>
+            <el-input-number v-model="activeCssMap.marginLeft" :precision="2" :step="0.1" :max="10"></el-input-number>
+          </div>
 				</div>
 				<div class="edit-item">
 					<label>圆角</label>
@@ -254,7 +261,7 @@ export default {
 			show64Dialog: false,
 			currentPhone: 'iphone 6/7/8',
 			scaleTimes: 170,
-			command: '',
+			command: 1,
 			base64: '',
 			classMap: new ClassMap(), //文件所有class
 			inputContent: '',
@@ -275,6 +282,7 @@ export default {
 		menutree
 	},
 	mounted() {
+    this.switchPhone(this.command)
 		let that = this;
 		document.getElementById('fileContent').addEventListener('change', function () {
 			console.log('input事件监听');
@@ -370,6 +378,7 @@ export default {
 			}
 		},
 		switchPhone(command) {
+      this.command = command
 			console.log('机型command: ' + command);
 			if (command == 1) {
 				this.$refs.visualViews.style.width = '320px';
@@ -391,7 +400,9 @@ export default {
 		},
     // 机型旋转
     phoneRotate() {
-
+      let temp = this.$refs.visualViews.style.height
+      this.$refs.visualViews.style.height = this.$refs.visualViews.style.width;
+			this.$refs.visualViews.style.width = temp;
     },
 		reduceScale() {
 			this.scaleTimes -= 10;
