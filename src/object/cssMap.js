@@ -40,6 +40,15 @@ export default class CssMap {
 		this.MsTextOverflow = 'ellipsis'
 		this.whiteSpace = 'nowrap'
 	}
+	setTwoLineEllipsis(num = 2) {
+		this.overflow = 'hidden'
+		this.textOverflow = 'ellipsis'
+		this.MsTextOverflow = 'ellipsis'
+		this.lineClamp = '2';
+		this.WebkitLineClamp = '2';
+	  this.display = '-webkit-box';
+		this.WebkitBoxOrient = 'vertical';
+	}
 	setPosition(mode = 'static', top = 'auto', right = 'auto', bottom = 'auto', left = 'auto') {
 		this.position = mode
 		this.top = top

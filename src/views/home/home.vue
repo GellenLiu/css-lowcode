@@ -151,17 +151,17 @@
 				</div>
 				<div class="edit-item">
 					<label>省略换行</label>
-					<el-dropdown @command="selectText">
+					<el-dropdown @command="textModeSelect">
 						<span class="el-dropdown-link">
 							自动换行
 							<i class="el-icon-arrow-down el-icon--right"></i>
 						</span>
 						<el-dropdown-menu slot="dropdown">
-							<el-dropdown-item command="animate__fadeIn">单行省略</el-dropdown-item>
-							<el-dropdown-item command="animate__fadeInDown">双行省略</el-dropdown-item>
-							<el-dropdown-item command="animate__fadeInLeft">单行省略</el-dropdown-item>
-							<el-dropdown-item command="animate__fadeInRight" disabled>单行省略</el-dropdown-item>
-							<el-dropdown-item command="animate__fadeOutUp">单行省略</el-dropdown-item>
+							<el-dropdown-item command="aLineEllipsis">单行省略</el-dropdown-item>
+							<el-dropdown-item command="twoLineEllipsis">双行省略</el-dropdown-item>
+							<el-dropdown-item command="aLineEllipsis">单行省略</el-dropdown-item>
+							<el-dropdown-item command="aLineEllipsis" disabled>单行省略</el-dropdown-item>
+							<el-dropdown-item command="aLineEllipsis">单行省略</el-dropdown-item>
 						</el-dropdown-menu>
 					</el-dropdown>
 				</div>
@@ -195,7 +195,7 @@
 					<label>图片模式</label>
 					<el-dropdown @command="backgroundMode">
 						<span class="el-dropdown-link">
-							fill
+							{{ bgMode }}
 							<i class="el-icon-arrow-down el-icon--right"></i>
 						</span>
 						<el-dropdown-menu slot="dropdown">
@@ -211,7 +211,7 @@
 					<label>添加动画</label>
 					<el-dropdown @command="addAnimate">
 						<span class="el-dropdown-link">
-							选择动画
+							{{ animateSelect }}
 							<i class="el-icon-arrow-down el-icon--right"></i>
 						</span>
 						<el-dropdown-menu slot="dropdown">
@@ -278,7 +278,9 @@ export default {
 			dialogImageUrl: '',
 			dialogVisible: false,
       unflodMargin: false,
-      file: null
+      file: null,
+      bgMode: "contain",
+      animateSelect: '无'
 		};
 	},
 	components: {
@@ -341,6 +343,19 @@ export default {
       this.activeCssMap.backgroundSize = "contain"
       // this.putImgCDN("https://image-1251917893.cos.ap-guangzhou.myqcloud.com/imgOptimization/120.png",file)
 		},
+    textModeSelect(command) {
+      switch (command) {
+        case 'aLineEllipsis': 
+          this.activeCssMap.setTextEllipsis()
+          break;
+        case 'twoLineEllipsis':
+          this.activeCssMap.setTwoLineEllipsis()
+          break;
+        default:
+          this.activeCssMap.setTextEllipsis()
+      }
+      this.activeCssMap.setTextEllipsis()
+    },
 		// 侧边栏折叠
 		handleOpen(key, keyPath) {
 			console.log(key, keyPath);
@@ -447,6 +462,7 @@ export default {
 		},
 		// 添加动画
 		addAnimate(command) {
+      this.animateSelect = command
       let link = document.createElement('link');
 			link.id = 'animation_id';
 			link.rel = "stylesheet";
