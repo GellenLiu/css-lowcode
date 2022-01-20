@@ -13,7 +13,7 @@ export default class CssMap {
 		for (let key in this) {
 			let tmp = key
 			// 驼峰转中划线
-			if (key == 'className') {
+			if (key == 'className' && typeof(this[tmp]) == 'string') {
 				continue
 			}
 			key = key
@@ -23,6 +23,9 @@ export default class CssMap {
 			css += key + ':' + this[tmp].toString() + ';'
 		}
 		return "." + this.className + '{' + css + '}'
+	}
+	setAnimate(animation) {
+    this.animation = animation
 	}
 	// flex布局
 	setFlexCenter() {

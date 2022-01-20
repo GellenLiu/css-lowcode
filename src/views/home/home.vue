@@ -213,11 +213,11 @@
 							<i class="el-icon-arrow-down el-icon--right"></i>
 						</span>
 						<el-dropdown-menu slot="dropdown">
-							<el-dropdown-item command="animate__fadeIn">渐入</el-dropdown-item>
-							<el-dropdown-item command="animate__fadeInDown">渐入</el-dropdown-item>
-							<el-dropdown-item command="animate__fadeInLeft">左渐入</el-dropdown-item>
-							<el-dropdown-item command="animate__fadeInRight" disabled>右渐入</el-dropdown-item>
-							<el-dropdown-item command="animate__fadeOutUp">向上消失</el-dropdown-item>
+							<el-dropdown-item command="fadeIn">渐入</el-dropdown-item>
+							<el-dropdown-item command="fadeInDown">渐入</el-dropdown-item>
+							<el-dropdown-item command="fadeInLeft">左渐入</el-dropdown-item>
+							<el-dropdown-item command="fadeInRight" disabled>右渐入</el-dropdown-item>
+							<el-dropdown-item command="fadeOutUp">向上消失</el-dropdown-item>
 						</el-dropdown-menu>
 					</el-dropdown>
 				</div>
@@ -225,7 +225,7 @@
 					<label>动画时长</label>
 					<el-input v-model="activeCssMap.className" placeholder=""></el-input>
 				</div>
-				<el-button :class="command" type="success" @click="run">运行</el-button>
+				<el-button type="success" @click="run">运行</el-button>
 				<el-button type="success" @click="downloadCss">下载保存</el-button>
 			</div>
 			<!-- 源代码 -->
@@ -430,10 +430,31 @@ export default {
 		},
 		// 添加动画
 		addAnimate(command) {
+      let link = document.createElement('link');
+			link.id = 'animation_id';
+			link.rel = "stylesheet";
+      link.href = "https://unpkg.com/animate.css@3.5.2/animate.min.css"
+			console.log(link);
+			// 删除原有的节点
+			let currentlink = document.getElementById('visualViews').contentWindow.document.getElementById('animation_id');
+			if (currentlink !== null) {
+				document.getElementById('visualViews').contentWindow.document.body.removeChild(currentlink);
+			}
+			// 新增节点
+			document.getElementById('visualViews').contentWindow.document.body.appendChild(link);
 			console.log(command);
 			// 要加animate__animated 才生效
-			this.command = 'animate__animated ' + command;
-			this.activeCssMap.animate = 'bounce 2s';
+			switch (command) {
+        case 'fadeIn' : 
+			    this.activeCssMap.setAnimate("flash 2s");
+          break;
+        case 'fadeIn' : 
+			    this.activeCssMap.setAnimate("flash 2s");
+          break;
+        default :
+          this.activeCssMap.setAnimate("flash 2s");
+          break;
+      }
 		},
 		// 重置css设置选项,遍历cssmap
 		settingInit(className = '') {
