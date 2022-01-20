@@ -172,6 +172,7 @@
 							:limit="1"
 							:drag="true"
 							:on-success="selectPic"
+              :on-error="selectPic"
 							action="https://jsonplaceholder.typicode.com/posts/"
 							list-type="picture-card"
 							:on-preview="handlePictureCardPreview"
@@ -192,7 +193,7 @@
 				</div>
 				<div class="edit-item">
 					<label>图片模式</label>
-					<el-dropdown @command="selectText">
+					<el-dropdown @command="backgroundMode">
 						<span class="el-dropdown-link">
 							fill
 							<i class="el-icon-arrow-down el-icon--right"></i>
@@ -332,11 +333,13 @@ export default {
 		handlePictureCardPreview(file) {
 			console.log(2);
 			this.dialogImageUrl = file.url;
-			this.dialogVisible = true;
+			// this.dialogVisible = true;
 		},
 		selectPic(event, file, fileList) {
-			this.activeCssMap.backgroundImage = file.name;
-      this.putImgCDN("https://image-1251917893.cos.ap-guangzhou.myqcloud.com/imgOptimization/120.png",file)
+      console.log("file-url:" + file.url)
+			this.activeCssMap.backgroundImage = "url(" + file.url + ')';
+      this.activeCssMap.backgroundSize = "contain"
+      // this.putImgCDN("https://image-1251917893.cos.ap-guangzhou.myqcloud.com/imgOptimization/120.png",file)
 		},
 		// 侧边栏折叠
 		handleOpen(key, keyPath) {
@@ -502,6 +505,9 @@ export default {
 				}
 			}
 		},
+    backgroundMode(command) {
+      this.activeCssMap.setBackgroundImageMode(command)
+    },
 		// 添加样式到对应class
 		run() {
 			console.log('添加样式到对应class,写入style标签');

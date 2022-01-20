@@ -13,7 +13,7 @@ export default class CssMap {
 		for (let key in this) {
 			let tmp = key
 			// 驼峰转中划线
-			if (key == 'className' && typeof(this[tmp]) == 'string') {
+			if (key == 'className' || typeof(this[tmp]) !== 'string') {
 				continue
 			}
 			key = key
