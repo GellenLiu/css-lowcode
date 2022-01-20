@@ -41,6 +41,7 @@
 					</el-dropdown-menu>
 				</el-dropdown>
         <img src="@/assets/phoneRotate.png" @click="phoneRotate"/>
+        <img src="@/assets/refresh.png" @click="refreshPage"/>
 			</div>
 			<input id="fileContent" type="file" />
 			<!-- 视图栏 -->
@@ -275,7 +276,8 @@ export default {
 			activeIndex: '1',
 			dialogImageUrl: '',
 			dialogVisible: false,
-      unflodMargin: false
+      unflodMargin: false,
+      file: null
 		};
 	},
 	components: {
@@ -287,6 +289,7 @@ export default {
 		document.getElementById('fileContent').addEventListener('change', function () {
 			console.log('input事件监听');
 			let resultFile = document.getElementById('fileContent').files[0];
+      this.file = resultFile;
 			that.fileInfo(resultFile);
 		});
 		this.addSpacingjs();
@@ -416,6 +419,17 @@ export default {
 			// console.log(this.activeCssMap)
 			console.log(this.activeCssMap.getContent());
 		},
+    refreshPage() {
+      console.log("refreshPage")
+      // 关闭文档流
+      document.getElementById('visualViews').contentWindow.document.close()
+      // 重新写入html文件,覆盖之前的
+      this.htmlTree = []
+      this.fileInfo(this.file)
+      // 重新设置监听，spacingjs，animation
+
+      // 遍历cssMap，classMAp重新插入style标签
+    },
 		// 省略换行选择
 		selectText(command) {
 			this.command = command;
