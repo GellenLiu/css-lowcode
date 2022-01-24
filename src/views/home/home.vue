@@ -40,8 +40,8 @@
 						<el-dropdown-item command="4">iphone X (375 x 812) | Dpr:3</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
-        <img src="@/assets/phoneRotate.png" @click="phoneRotate"/>
-        <img src="@/assets/refresh.png" @click="refreshPage"/>
+				<img src="@/assets/phoneRotate.png" @click="phoneRotate" />
+				<img src="@/assets/refresh.png" @click="refreshPage" />
 			</div>
 			<input id="fileContent" type="file" />
 			<!-- 视图栏 -->
@@ -76,17 +76,32 @@
 					<el-input v-model="activeCssMap.inputPosition" placeholder="请输入位置"></el-input>
 				</div>
 				<div class="edit-item edit-item-wrapper">
-					<label>布局</label>
-					<div class="text-aligh-icon">
+					<label>主轴布局</label>
+					<div class="text-aligh-icon" @click="flexMainLayout('center')">
 						<img src="@/assets/horizontal-center.png" />
 					</div>
-					<div class="text-aligh-icon">
+					<div class="text-aligh-icon" @click="flexMainLayout('justify-center')">
 						<img src="@/assets/vertical-center.png" />
 					</div>
-					<div class="text-aligh-icon">
+					<div class="text-aligh-icon" @click="flexMainLayout('flex-end')">
 						<img src="@/assets/flex-end-icon.png" />
 					</div>
-					<div class="text-aligh-icon">
+					<div class="text-aligh-icon" @click="flexMainLayout('flex-start')">
+						<img src="@/assets/flex-start-icon.png" />
+					</div>
+				</div>
+				<div class="edit-item edit-item-wrapper">
+					<label>交叉轴布局</label>
+					<div class="text-aligh-icon" @click="flexCrossLayout('center')">
+						<img src="@/assets/horizontal-center.png" />
+					</div>
+					<div class="text-aligh-icon" @click="flexCrossLayout('justify-center')">
+						<img src="@/assets/vertical-center.png" />
+					</div>
+					<div class="text-aligh-icon" @click="flexCrossLayout('flex-end')">
+						<img src="@/assets/flex-end-icon.png" />
+					</div>
+					<div class="text-aligh-icon" @click="flexCrossLayout('flex-start')">
 						<img src="@/assets/flex-start-icon.png" />
 					</div>
 				</div>
@@ -103,24 +118,24 @@
 				<div class="edit-item">
 					<label>外边距</label>
 					<el-input class="input-margin" v-model="activeCssMap.height" placeholder=""></el-input>
-          <div class="el-icon-circle-plus-outline" @click="expandMargin"></div>
-          <div class="input-margin-item" style="display: none;">
-            <el-input-number v-model="activeCssMap.marginTop" :precision="2" :step="0.1" :max="10"></el-input-number>
-            <el-input-number v-model="activeCssMap.marginRight" :precision="2" :step="0.1" :max="10"></el-input-number>
-            <el-input-number v-model="activeCssMap.marginBottom" :precision="2" :step="0.1" :max="10"></el-input-number>
-            <el-input-number v-model="activeCssMap.marginLeft" :precision="2" :step="0.1" :max="10"></el-input-number>
-          </div>
+					<div class="el-icon-circle-plus-outline" @click="expandMargin"></div>
+					<div class="input-margin-item" style="display: none">
+						<el-input-number v-model="activeCssMap.marginTop" :precision="2" :step="0.1" :max="10" placeholder="上边距"></el-input-number>
+						<el-input-number v-model="activeCssMap.marginRight" :precision="2" :step="0.1" :max="10" placeholder="下边距"></el-input-number>
+						<el-input-number v-model="activeCssMap.marginBottom" :precision="2" :step="0.1" :max="10" placeholder="右边距"></el-input-number>
+						<el-input-number v-model="activeCssMap.marginLeft" :precision="2" :step="0.1" :max="10" placeholder="左边距"></el-input-number>
+					</div>
 				</div>
 				<div class="edit-item">
 					<label>内边距</label>
 					<el-input class="input-padding" v-model="activeCssMap.height" placeholder=""></el-input>
-          <div class="el-icon-circle-plus-outline" @click="expandMargin"></div>
-          <div class="input-margin-item" style="display: none;">
-            <el-input-number v-model="activeCssMap.marginTop" :precision="2" :step="0.1" :max="10"></el-input-number>
-            <el-input-number v-model="activeCssMap.marginRight" :precision="2" :step="0.1" :max="10"></el-input-number>
-            <el-input-number v-model="activeCssMap.marginBottom" :precision="2" :step="0.1" :max="10"></el-input-number>
-            <el-input-number v-model="activeCssMap.marginLeft" :precision="2" :step="0.1" :max="10"></el-input-number>
-          </div>
+					<div class="el-icon-circle-plus-outline" @click="expandPadding"></div>
+					<div class="input-padding-item" style="display: none">
+						<el-input-number v-model="activeCssMap.paddingTop" :precision="2" :step="0.1" :max="10" placeholder="上边距"></el-input-number>
+						<el-input-number v-model="activeCssMap.paddingRight" :precision="2" :step="0.1" :max="10" placeholder="下边距"></el-input-number>
+						<el-input-number v-model="activeCssMap.paddingBottom" :precision="2" :step="0.1" :max="10" placeholder="右边距"></el-input-number>
+						<el-input-number v-model="activeCssMap.paddingLeft" :precision="2" :step="0.1" :max="10" placeholder="左边距"></el-input-number>
+					</div>
 				</div>
 				<div class="edit-item">
 					<label>圆角</label>
@@ -135,7 +150,7 @@
 				</div>
 				<div class="edit-item edit-item-wrapper">
 					<label>颜色</label>
-					<el-input v-model="activeCssMap.fontColor" placeholder="请输入字体颜色"></el-input>
+					<el-input v-model="activeCssMap.color" placeholder="请输入字体颜色"></el-input>
 					<el-color-picker v-model="activeCssMap.color"></el-color-picker>
 				</div>
 				<div class="edit-item edit-item-wrapper">
@@ -151,7 +166,7 @@
 				</div>
 				<div class="edit-item">
 					<label>省略换行</label>
-					<el-dropdown @command="textModeSelect">
+					<el-dropdown @command="textModeSelect" trigger="click">
 						<span class="el-dropdown-link">
 							自动换行
 							<i class="el-icon-arrow-down el-icon--right"></i>
@@ -172,7 +187,7 @@
 							:limit="1"
 							:drag="true"
 							:on-success="selectPic"
-              :on-error="selectPic"
+							:on-error="selectPic"
 							action="https://jsonplaceholder.typicode.com/posts/"
 							list-type="picture-card"
 							:on-preview="handlePictureCardPreview"
@@ -193,7 +208,7 @@
 				</div>
 				<div class="edit-item">
 					<label>图片模式</label>
-					<el-dropdown @command="backgroundMode">
+					<el-dropdown @command="backgroundMode" trigger="click">
 						<span class="el-dropdown-link">
 							{{ bgMode }}
 							<i class="el-icon-arrow-down el-icon--right"></i>
@@ -209,7 +224,7 @@
 				</div>
 				<div class="edit-item">
 					<label>添加动画</label>
-					<el-dropdown @command="addAnimate">
+					<el-dropdown @command="addAnimate" trigger="click">
 						<span class="el-dropdown-link">
 							{{ animateSelect }}
 							<i class="el-icon-arrow-down el-icon--right"></i>
@@ -277,22 +292,24 @@ export default {
 			activeIndex: '1',
 			dialogImageUrl: '',
 			dialogVisible: false,
-      unflodMargin: false,
-      file: null,
-      bgMode: "contain",
-      animateSelect: '无'
+			unflodMargin: false,
+      unflodPadding: false,
+			file: null,
+			bgMode: 'contain',
+			animateSelect: '无',
+			selectClassFlag: false
 		};
 	},
 	components: {
 		menutree
 	},
 	mounted() {
-    this.switchPhone(this.command)
+		this.switchPhone(this.command);
 		let that = this;
 		document.getElementById('fileContent').addEventListener('change', function () {
 			console.log('input事件监听');
 			let resultFile = document.getElementById('fileContent').files[0];
-      this.file = resultFile;
+			this.file = resultFile;
 			that.fileInfo(resultFile);
 		});
 		this.addSpacingjs();
@@ -302,30 +319,72 @@ export default {
 		this.classMapInit();
 	},
 	methods: {
-    expandMargin() {
-      if(this.unflodMargin) {
-        document.querySelector(".input-margin-item").style.display = "none"
-      } else {
-        document.querySelector(".input-margin-item").style.display = "block"
-      }
-      this.unflodMargin = !this.unflodMargin
-    },
-    // canvas 压缩图片
-    compressImage() {
-
-    },
+		// 布局设置
+		flexMainLayout(mode) {
+			this.activeCssMap.display = 'flex';
+			switch (mode) {
+				case 'center':
+					this.activeCssMap.justifyContent = 'center';
+					break;
+				case 'flex-end':
+					this.activeCssMap.justifyContent = 'flex-end';
+					break;
+				case 'flex-start':
+					this.activeCssMap.justifyContent = 'flex-start';
+					break;
+				default:
+					this.activeCssMap.justifyContent = 'center';
+					break;
+			}
+		},
+		flexCrossLayout(mode) {
+			this.activeCssMap.display = 'flex';
+			switch (mode) {
+				case 'center':
+					this.activeCssMap.alignItems = 'center';
+					break;
+				case 'flex-end':
+					this.activeCssMap.alignItems = 'flex-end';
+					break;
+				case 'flex-start':
+					this.activeCssMap.alignItems = 'flex-start';
+					break;
+				default:
+					this.activeCssMap.alignItems = 'center';
+					break;
+			}
+		},
+		expandMargin() {
+			if (this.unflodMargin) {
+				document.querySelector('.input-margin-item').style.display = 'none';
+			} else {
+				document.querySelector('.input-margin-item').style.display = 'block';
+			}
+			this.unflodMargin = !this.unflodMargin;
+		},
+		expandPadding() {
+			if (this.unflodPadding) {
+				document.querySelector('.input-padding-item').style.display = 'none';
+			} else {
+				document.querySelector('.input-padding-item').style.display = 'block';
+			}
+			this.unflodPadding = !this.unflodPadding;
+		},
+		// canvas 压缩图片
+		compressImage() {},
 		// 图片上传CDN
-		putImgCDN(url,file) {
-      // 需要配置跨域访问、AWS签名认证(临时签名需要从后端动态获取)
-      let AccessKey = 'AKID6W7c-uinfVQBF5TE5ztAYxS6St3RlcySSA8ZYflLLS6zW1F42jYOaooyCWGHW6R0';
-      let SecretKey = "4ZatXKEE33GXnk/y+hrQYK6R3bBRRQ0yXUnvq81AtQ4=";
-      let SessionToken = "ZniDSrt709rbILeb5q2ESrC3IbvzxWbae5787b1c3d2b057490dc9e71f844614bXo41xKKgiPhb2l-QzkIM3YqtBIATNsQjMwbLagggPw4GiX5ysGBLfdnNQWM55guwZxi9HKf5Z-SUqONs78c29AlvJr7KlqjxYG9LnLHQAeSXi7_qdscI2pJ1liv8WHqcIK6Gag_NsPrJUOFr1tpAdbCsWjegBi5TuIK0w-q85Nt3d0LMySWNwq1bZ91xFRsL7Fjo62r8wpLQyN0eM2NDgwOtfWwV6-icUcyIaQF6diKyGb-xL9AHp8QJCMuJm-wpOBfS8A8yZVLpBfxpRBx9eTVwxrty_5lr5wWPt3mYjrs"
+		putImgCDN(url, file) {
+			// 需要配置跨域访问、AWS签名认证(临时签名需要从后端动态获取)
+			let AccessKey = 'AKID6W7c-uinfVQBF5TE5ztAYxS6St3RlcySSA8ZYflLLS6zW1F42jYOaooyCWGHW6R0';
+			let SecretKey = '4ZatXKEE33GXnk/y+hrQYK6R3bBRRQ0yXUnvq81AtQ4=';
+			let SessionToken =
+				'ZniDSrt709rbILeb5q2ESrC3IbvzxWbae5787b1c3d2b057490dc9e71f844614bXo41xKKgiPhb2l-QzkIM3YqtBIATNsQjMwbLagggPw4GiX5ysGBLfdnNQWM55guwZxi9HKf5Z-SUqONs78c29AlvJr7KlqjxYG9LnLHQAeSXi7_qdscI2pJ1liv8WHqcIK6Gag_NsPrJUOFr1tpAdbCsWjegBi5TuIK0w-q85Nt3d0LMySWNwq1bZ91xFRsL7Fjo62r8wpLQyN0eM2NDgwOtfWwV6-icUcyIaQF6diKyGb-xL9AHp8QJCMuJm-wpOBfS8A8yZVLpBfxpRBx9eTVwxrty_5lr5wWPt3mYjrs';
 
-      let auth =  "Authorization: AWS " + AccessKey + ":" + SecretKey
+			let auth = 'Authorization: AWS ' + AccessKey + ':' + SecretKey;
 			var xhr = new XMLHttpRequest();
 			xhr.open('PUT', url, true);
 			xhr.setRequestHeader('Authorization', auth);
-      xhr.send(file)
+			xhr.send(file);
 		},
 
 		//图片设置
@@ -338,24 +397,24 @@ export default {
 			// this.dialogVisible = true;
 		},
 		selectPic(event, file, fileList) {
-      console.log("file-url:" + file.url)
-			this.activeCssMap.backgroundImage = "url(" + file.url + ')';
-      this.activeCssMap.backgroundSize = "contain"
-      // this.putImgCDN("https://image-1251917893.cos.ap-guangzhou.myqcloud.com/imgOptimization/120.png",file)
+			console.log('file-url:' + file.url);
+			this.activeCssMap.backgroundImage = 'url(' + file.url + ')';
+			this.activeCssMap.backgroundSize = 'contain';
+			// this.putImgCDN("https://image-1251917893.cos.ap-guangzhou.myqcloud.com/imgOptimization/120.png",file)
 		},
-    textModeSelect(command) {
-      switch (command) {
-        case 'aLineEllipsis': 
-          this.activeCssMap.setTextEllipsis()
-          break;
-        case 'twoLineEllipsis':
-          this.activeCssMap.setTwoLineEllipsis()
-          break;
-        default:
-          this.activeCssMap.setTextEllipsis()
-      }
-      this.activeCssMap.setTextEllipsis()
-    },
+		textModeSelect(command) {
+			switch (command) {
+				case 'aLineEllipsis':
+					this.activeCssMap.setTextEllipsis();
+					break;
+				case 'twoLineEllipsis':
+					this.activeCssMap.setTwoLineEllipsis();
+					break;
+				default:
+					this.activeCssMap.setTextEllipsis();
+			}
+			this.activeCssMap.setTextEllipsis();
+		},
 		// 侧边栏折叠
 		handleOpen(key, keyPath) {
 			console.log(key, keyPath);
@@ -370,6 +429,12 @@ export default {
 			this.activeClass = e.target.innerText.substring(e.target.innerText.indexOf('.') + 1);
 			document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.currentClass).style.outline = 'none';
 			document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = 'red solid 2px';
+			if (this.currentClass === this.activeClass) {
+				this.selectClassFlag = !this.selectClassFlag;
+			}
+			if (this.selectClassFlag) {
+				document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = 'none';
+			}
 			this.activeCssMap = new CssMap(this.activeClass);
 			this.settingInit(this.activeClass);
 		},
@@ -399,7 +464,7 @@ export default {
 			}
 		},
 		switchPhone(command) {
-      this.command = command
+			this.command = command;
 			console.log('机型command: ' + command);
 			if (command == 1) {
 				this.$refs.visualViews.style.width = '320px';
@@ -419,12 +484,12 @@ export default {
 				this.currentPhone = 'iphone X (375 x 812)';
 			}
 		},
-    // 机型旋转
-    phoneRotate() {
-      let temp = this.$refs.visualViews.style.height
-      this.$refs.visualViews.style.height = this.$refs.visualViews.style.width;
+		// 机型旋转
+		phoneRotate() {
+			let temp = this.$refs.visualViews.style.height;
+			this.$refs.visualViews.style.height = this.$refs.visualViews.style.width;
 			this.$refs.visualViews.style.width = temp;
-    },
+		},
 		reduceScale() {
 			this.scaleTimes -= 10;
 			document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes / 100})`;
@@ -437,17 +502,17 @@ export default {
 			// console.log(this.activeCssMap)
 			console.log(this.activeCssMap.getContent());
 		},
-    refreshPage() {
-      console.log("refreshPage")
-      // 关闭文档流
-      document.getElementById('visualViews').contentWindow.document.close()
-      // 重新写入html文件,覆盖之前的
-      this.htmlTree = []
-      this.fileInfo(this.file)
-      // 重新设置监听，spacingjs，animation
+		refreshPage() {
+			console.log('refreshPage');
+			// 关闭文档流
+			document.getElementById('visualViews').contentWindow.document.close();
+			// 重新写入html文件,覆盖之前的
+			this.htmlTree = [];
+			this.fileInfo(this.file);
+			// 重新设置监听，spacingjs，animation
 
-      // 遍历cssMap，classMAp重新插入style标签
-    },
+			// 遍历cssMap，classMAp重新插入style标签
+		},
 		// 省略换行选择
 		selectText(command) {
 			this.command = command;
@@ -462,11 +527,11 @@ export default {
 		},
 		// 添加动画
 		addAnimate(command) {
-      this.animateSelect = command
-      let link = document.createElement('link');
+			this.animateSelect = command;
+			let link = document.createElement('link');
 			link.id = 'animation_id';
-			link.rel = "stylesheet";
-      link.href = "https://unpkg.com/animate.css@3.5.2/animate.min.css"
+			link.rel = 'stylesheet';
+			link.href = 'https://unpkg.com/animate.css@3.5.2/animate.min.css';
 			console.log(link);
 			// 删除原有的节点
 			let currentlink = document.getElementById('visualViews').contentWindow.document.getElementById('animation_id');
@@ -478,16 +543,16 @@ export default {
 			console.log(command);
 			// 要加animate__animated 才生效
 			switch (command) {
-        case 'fadeIn' : 
-			    this.activeCssMap.setAnimate("flash 2s");
-          break;
-        case 'fadeIn' : 
-			    this.activeCssMap.setAnimate("flash 2s");
-          break;
-        default :
-          this.activeCssMap.setAnimate("flash 2s");
-          break;
-      }
+				case 'fadeIn':
+					this.activeCssMap.setAnimate('flash 2s');
+					break;
+				case 'fadeIn':
+					this.activeCssMap.setAnimate('flash 2s');
+					break;
+				default:
+					this.activeCssMap.setAnimate('flash 2s');
+					break;
+			}
 		},
 		// 重置css设置选项,遍历cssmap
 		settingInit(className = '') {
@@ -521,9 +586,9 @@ export default {
 				}
 			}
 		},
-    backgroundMode(command) {
-      this.activeCssMap.setBackgroundImageMode(command)
-    },
+		backgroundMode(command) {
+			this.activeCssMap.setBackgroundImageMode(command);
+		},
 		// 添加样式到对应class
 		run() {
 			console.log('添加样式到对应class,写入style标签');
@@ -627,6 +692,12 @@ export default {
 							this.activeClass = e.target.className;
 							document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.currentClass).style.outline = 'none';
 							document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = 'red solid 2px';
+							if (this.currentClass === this.activeClass) {
+								this.selectClassFlag = !this.selectClassFlag;
+							}
+							if (this.selectClassFlag) {
+								document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = 'none';
+							}
 							if (that.classMap.hasClass(e.target.className)) {
 								that.activeCssMap = that.classMap.getClassContent(e.target.className);
 							} else {

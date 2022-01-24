@@ -32,3 +32,20 @@
 .el-menu-vertical-demo {
   width: 100%;
 }
+// 下拉组件
+.el-dropdown {
+  background-color: #f5f7fa;
+	border-radius: 4px;
+}
+.input-margin-item .el-input-number .el-input__inner,
+.input-padding-item .el-input-number .el-input__inner {
+	padding: 0;
+}
+.edit-item  .el-input-number {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	width: 140px;
+	height: 100%;
+}
