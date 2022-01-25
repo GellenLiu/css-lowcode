@@ -11,9 +11,10 @@
 				<div class="tools-list-item" @click="getBase64">
 					<img src="@/assets/toBase64.png" />
 				</div>
-				<div class="tools-list-item" style="position: relative;"><img src="@/assets/getColor.png" />
-          <el-color-picker class="color-picker-tool"></el-color-picker>
-        </div>
+				<div class="tools-list-item" style="position: relative">
+					<img src="@/assets/getColor.png" />
+					<el-color-picker class="color-picker-tool"></el-color-picker>
+				</div>
 				<!-- 配色表 -->
 				<div class="tools-list-item"><img src="@/assets/getColor.png" /></div>
 			</div>
@@ -66,9 +67,13 @@
 			</div>
 			<!-- 设置 -->
 			<div v-if="!editActive">
-				<div class="edit-item">
+				<div class="edit-item module-edit-item">
 					<label>选择模块</label>
 					<el-input v-model="activeCssMap.className" placeholder="请输入class"></el-input>
+					<!-- 样式库 -->
+					<el-select v-model="componentStyleSelect" placeholder="默认样式" @change="componentStyleSelectHandler">
+						<el-option v-for="item in componentStyleSelectOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+					</el-select>
 				</div>
 				<div class="edit-item position-edit-item">
 					<label>位置</label>
@@ -285,7 +290,7 @@
 			</div>
 		</div>
 		<!-- 弹窗 -->
-		<to-base-64-dialog v-if="show64Dialog" v-on:closed="closedialog"></to-base-64-dialog>
+		<basetodialog v-if="show64Dialog" v-on:closed="closedialog"></basetodialog>
 		<div id="ruler" :draggable="true"></div>
 		<div class="dialog-mask" v-if="show64Dialog" v-on:closed="closedialog"></div>
 	</div>
@@ -293,12 +298,11 @@
 <script>
 import ClassMap from '@/object/classMap.js';
 import CssMap from '@/object/cssMap.js';
-import toBase64Dialog from './module/toBase64Dialog';
-import ToBase64Dialog from './module/toBase64Dialog.vue';
+import basetodialog from '@/views/home/module/basetodialog.vue';
 import menutree from '@/components/menuTree.vue';
 import ImageCompressor from '@/assets/image-compressor.min.js';
 export default {
-	components: { toBase64Dialog },
+	components: { basetodialog, menutree },
 	data() {
 		return {
 			active: false,
@@ -406,12 +410,35 @@ export default {
 					label: '双行省略'
 				},
 				{
-					value: 'twoLineEllipsis',
+					value: 'noneLineEllipsis',
 					label: '不换行'
 				},
 				{
 					value: 'thirdLineEllipsis',
 					label: '三行省略'
+				}
+			],
+			componentStyleSelect: '默认样式',
+			componentStyleSelectOptions: [
+				{
+					value: '',
+					label: '默认样式'
+				},
+				{
+					value: 'qqSpeed',
+					label: 'QQ飞车'
+				},
+				{
+					value: 'pvp',
+					label: '王者荣耀'
+				},
+				{
+					value: 'gp',
+					label: '和平精英'
+				},
+				{
+					value: 'hlddz',
+					label: '欢乐斗地主'
 				}
 			]
 		};
@@ -420,6 +447,9 @@ export default {
 		menutree
 	},
 	mounted() {
+		let text = require('../../styles/styleStore/app.js');
+		console.log(text.style);
+
 		this.switchPhone(this.command);
 		let that = this;
 		document.getElementById('fileContent').addEventListener('change', function () {
@@ -608,6 +638,39 @@ export default {
 					this.activeCssMap.setTextEllipsis();
 			}
 			// this.activeCssMap.setTextEllipsis();
+		},
+		componentStyleSelectHandler() {
+			let command = this.componentStyleSelect;
+			let style;
+			switch (command) {
+				case 'pvp':
+					style = require('../../styles/styleStore/pvp.js');
+					break;
+				case 'gp':
+					style = require('../../styles/styleStore/gp.js');
+					break;
+				case 'qqSpeed':
+					style = require('../../styles/styleStore/qqSpeed.js');
+					break;
+				case 'hlddz':
+					style = require('../../styles/styleStore/hlddz.js');
+					break;
+				default:
+					style = require('../../styles/styleStore/app.js');
+					break;
+			}
+      console.log(style.style)
+      let str = style.style
+      str.replaceAll(/(\n|\r|(\r\n)|(\u0085)|(\u2028)|(\u2029))/g, "");
+      let a = str.indexOf('.')
+      let b = str.indexOf('{')
+      let c = str.indexOf(':')
+      let d = str.indexOf(';')
+      let hfcssMap = new CssMap(str.substring(a+1, b))
+      hfcssMap[str.substring(b+1, c)] = str.substring(c+1,d)
+      this.classMap.setClass(str.substring(a+1, b), hfcssMap)
+      console.log("classmmmm:")
+      console.log(this.classMap)
 		},
 		// 侧边栏折叠
 		handleOpen(key, keyPath) {

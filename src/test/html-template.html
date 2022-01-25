@@ -32,6 +32,19 @@
       </div>
       <div class="position">定位示例</div>
       <div class="backgournd-example"></div>
+      <div>组件换肤示例</div>
+      <div class="merchant">
+        <div class="merchant-header">
+          <img class="merchant-logo" src="http://www.hfut.edu.cn/images/hgd_logo.png"/>
+          <div class="merchant-name">合肥工业大学</div>
+        </div>
+        <div class="merchant-content">
+          <div class="merchant-img-wrapper">
+            <img class="merchant-img" src="http://www.hfut.edu.cn/images/hgd_logo.png"/>
+          </div>
+          <div class="merchant-content-title">软件学院</div>
+        </div>
+      </div>
     </div>
   </body>
   <style>
@@ -58,6 +71,31 @@
        height: 60px;
        width: 60px;
        margin: 10px;
+     }
+     .merchant {
+       border: #01a0ff 1px solid;  
+     }
+     .merchant-header {
+       display: flex;
+       justify-content: flex-start;
+       align-items: center;
+     }
+     .merchant-logo {
+       height: 30px;
+       width: 30px;
+       margin-left: 10px;
+       margin-right: 10px;
+     }
+     .merchant-content {
+       display: flex;
+       justify-content: flex-start;
+       margin-top: 10px;
+     }
+     .merchant-img {
+       width: 70px;
+       height: 70px;
+       margin-left: 10px;
+       margin-right: 20px;
      }
   </style>
 </html>

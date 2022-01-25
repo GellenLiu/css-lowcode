@@ -372,3 +372,9 @@ label span {
 	width: 46px;
 	height: 46px;
 }
+.module-edit-item .el-input,
+.module-edit-item .el-input .el-input__inner {
+	display: inline-block;
+	width: 110px;
+	margin-right: 10px;
+}
