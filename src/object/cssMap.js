@@ -48,6 +48,7 @@ export default class CssMap {
 		this.WebkitLineClamp = '2';
 	  this.display = '-webkit-box';
 		this.WebkitBoxOrient = 'vertical';
+		this.whiteSpace = 'wrap';
 	}
 	setPosition(mode = 'static', top = 'auto', right = 'auto', bottom = 'auto', left = 'auto') {
 		this.position = mode

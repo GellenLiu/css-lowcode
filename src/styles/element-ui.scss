@@ -38,14 +38,24 @@
 	border-radius: 4px;
 }
 .input-margin-item .el-input-number .el-input__inner,
-.input-padding-item .el-input-number .el-input__inner {
+.input-padding-item .el-input-number .el-input__inner,
+.el-form-item .el-input-number .el-input__inner {
 	padding: 0;
+	height: auto;
 }
-.edit-item  .el-input-number {
+.edit-item  .el-input-number,
+.el-input-number {
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
 	width: 140px;
 	height: 100%;
+}
+.cdn-text .el-form-item__content {
+	margin-left: 0 !important;
+	display: inline-block;
+}
+.el-input__suffix .el-select__caret {
+  height: 33px;
 }

@@ -23,6 +23,7 @@
 
 <script>
 export default {
+	name: 'toBase64Dialog',
 	props: ['visible'],
 	data() {
 		return {

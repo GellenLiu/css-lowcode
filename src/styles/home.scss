@@ -298,3 +298,65 @@ label span {
 .edit-item .el-icon-circle-plus-outline, .el-button--success {
 	width: 140px;
 }
+.edit-item-pic {
+	position: relative;
+}
+.pic-setting {
+	position: absolute;
+  left: 10px;
+	top: 90px;
+	height: 20px;
+	width: 20px;
+	background: url(../assets/setting.png) no-repeat 0 0;
+	background-size: contain;
+}
+.pic-input-select {
+	width: 148px;
+	height: 148px;
+	border-radius: 6px;
+	border-style: initial;
+	border: 2px dashed #eef0f6;
+	background: url(../assets/input-select.png) no-repeat center 0;
+	background-size: 100% 100%;
+}
+.pic-input-select:hover {
+	border: 2px dashed #80b2e0;
+}
+.input-border-width {
+	width: 100px;
+}
+.border-setting .el-select,
+.border-setting .el-input,
+.border-setting .el-input .el-input__inner {
+  width: 70px;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+// 直尺
+#ruler {
+	display: none;
+  position: fixed;
+	top: 60px;
+	left: 300px;
+	height: 405px;
+	width: 1240px;
+	z-index: 999;
+	transform: scale(.5);
+	background: url(../assets/ruleIcon2.png) no-repeat 0 0;
+	background-size: 100% 100%;
+}
+.position-edit-item .el-input {
+	margin: 0 10px;
+}
+.position-edit-item .el-select {
+ margin:  0 10px;
+}
+.position-edit-item .el-select,
+.position-edit-item  .el-select .el-input,
+.position-edit-item .el-select  .el-input .el-input__inner {
+  width: 100px;
+}
+.position-edit-item .el-input,
+.position-edit-item .el-input .el-input__inner {
+	width: 50px;
+}

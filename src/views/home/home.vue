@@ -7,7 +7,7 @@
 				<div class="components-list-tab" :class="active ? 'tab-active' : ''" @click="switchTab(1)">工具</div>
 			</div>
 			<div class="tools-list" v-if="active">
-				<div class="tools-list-item"><img src="@/assets/ruler.png" /></div>
+				<div class="tools-list-item" @click="openRuler"><img src="@/assets/ruler.png" /></div>
 				<div class="tools-list-item" @click="getBase64">
 					<img src="@/assets/toBase64.png" />
 				</div>
@@ -71,9 +71,13 @@
 					<label>选择模块</label>
 					<el-input v-model="activeCssMap.className" placeholder="请输入class"></el-input>
 				</div>
-				<div class="edit-item">
+				<div class="edit-item position-edit-item">
 					<label>位置</label>
-					<el-input v-model="activeCssMap.inputPosition" placeholder="请输入位置"></el-input>
+          <el-select v-model="positionSelect" placeholder="默认" @change="positionSelect">
+						<el-option v-for="item in positionSelectOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+					</el-select>
+					<el-input v-model="activeCssMap.inputPosition" placeholder="x"></el-input>
+					<el-input v-model="activeCssMap.inputPosition" placeholder="y"></el-input>
 				</div>
 				<div class="edit-item edit-item-wrapper">
 					<label>主轴布局</label>
@@ -115,9 +119,18 @@
 						<el-input v-model="activeCssMap.height" placeholder="请输入高度"></el-input>
 					</div>
 				</div>
+				<div class="edit-item border-setting edit-item-wrapper">
+					<label>边框</label>
+					<el-select v-model="borderStyle" placeholder="请选择" @change="borderSelect">
+						<el-option v-for="item in borderStyleOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+					</el-select>
+					<el-input class="input-border-width" v-model="activeCssMap.borderWidth" placeholder="宽度"></el-input>
+					<el-input v-model="activeCssMap.borderColor" placeholder="边框颜色"></el-input>
+					<el-color-picker v-model="activeCssMap.borderColor"></el-color-picker>
+				</div>
 				<div class="edit-item">
 					<label>外边距</label>
-					<el-input class="input-margin" v-model="activeCssMap.height" placeholder=""></el-input>
+					<el-input class="input-margin" v-model="activeCssMap.margin" placeholder=""></el-input>
 					<div class="el-icon-circle-plus-outline" @click="expandMargin"></div>
 					<div class="input-margin-item" style="display: none">
 						<el-input-number v-model="activeCssMap.marginTop" :precision="2" :step="0.1" :max="10" placeholder="上边距"></el-input-number>
@@ -128,7 +141,7 @@
 				</div>
 				<div class="edit-item">
 					<label>内边距</label>
-					<el-input class="input-padding" v-model="activeCssMap.height" placeholder=""></el-input>
+					<el-input class="input-padding" v-model="activeCssMap.padding" placeholder=""></el-input>
 					<div class="el-icon-circle-plus-outline" @click="expandPadding"></div>
 					<div class="input-padding-item" style="display: none">
 						<el-input-number v-model="activeCssMap.paddingTop" :precision="2" :step="0.1" :max="10" placeholder="上边距"></el-input-number>
@@ -154,6 +167,7 @@
 					<el-color-picker v-model="activeCssMap.color"></el-color-picker>
 				</div>
 				<div class="edit-item edit-item-wrapper">
+          <label>文本对齐</label>
 					<div class="text-aligh-icon">
 						<img src="@/assets/text-center-icon.png" />
 					</div>
@@ -163,26 +177,41 @@
 					<div class="text-aligh-icon">
 						<img src="@/assets/text-right-icon.png" />
 					</div>
+          <div class="text-aligh-icon">
+						<img src="@/assets/both-ends.png" />
+					</div>
 				</div>
 				<div class="edit-item">
 					<label>省略换行</label>
-					<el-dropdown @command="textModeSelect" trigger="click">
-						<span class="el-dropdown-link">
-							自动换行
-							<i class="el-icon-arrow-down el-icon--right"></i>
-						</span>
-						<el-dropdown-menu slot="dropdown">
-							<el-dropdown-item command="aLineEllipsis">单行省略</el-dropdown-item>
-							<el-dropdown-item command="twoLineEllipsis">双行省略</el-dropdown-item>
-							<el-dropdown-item command="aLineEllipsis">单行省略</el-dropdown-item>
-							<el-dropdown-item command="aLineEllipsis" disabled>单行省略</el-dropdown-item>
-							<el-dropdown-item command="aLineEllipsis">单行省略</el-dropdown-item>
-						</el-dropdown-menu>
-					</el-dropdown>
+          <el-select v-model="ellipsisSelect" placeholder="请选择" @change="ellipsisSelectHandler">
+						<el-option v-for="item in ellipsisSelectOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+					</el-select>
 				</div>
-				<div class="edit-item edit-item-wrapper">
+				<div class="edit-item edit-item-wrapper edit-item-pic">
 					<label>图片设置</label>
+					<el-popover placement="right" width="400" trigger="click">
+						<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+							<el-form-item label="CDN地址" prop="name" class="cdn-text">
+								<el-input v-model="ruleForm.name"></el-input>
+							</el-form-item>
+							<el-form-item label="是否上传" prop="delivery">
+								<el-switch v-model="ruleForm.delivery"></el-switch>
+							</el-form-item>
+							<el-form-item label="是否压缩" prop="delivery">
+								<el-switch v-model="ruleForm.delivery"></el-switch>
+							</el-form-item>
+							<el-form-item label="压缩效果" prop="name">
+								<el-input-number v-model="activeCssMap.paddingTop" :precision="2" :step="0.1" :max="1" placeholder="上边距"></el-input-number>
+							</el-form-item>
+							<el-form-item>
+								<el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+								<el-button @click="resetForm('ruleForm')">重置</el-button>
+							</el-form-item>
+						</el-form>
+						<div class="pic-setting" slot="reference"></div>
+					</el-popover>
 					<div class="picture-wrapper">
+						<!-- <div class="pic-input-select" @click="picSelect"></div> -->
 						<el-upload
 							:limit="1"
 							:drag="true"
@@ -201,10 +230,8 @@
 					</div>
 				</div>
 				<div class="edit-item">
-					<label>
-						图片名称：
-						<span>{{ activeCssMap.backgroundImage }}</span>
-					</label>
+					<label>图片名称：</label>
+					<el-input v-model="activeCssMap.backgroundImage"></el-input>
 				</div>
 				<div class="edit-item">
 					<label>图片模式</label>
@@ -240,7 +267,7 @@
 				</div>
 				<div class="edit-item">
 					<label>动画时长</label>
-					<el-input v-model="activeCssMap.className" placeholder=""></el-input>
+					<el-input v-model="activeCssMap.animationDuration" placeholder=""></el-input>
 				</div>
 				<el-button type="success" @click="run">运行</el-button>
 				<el-button type="success" @click="downloadCss">下载保存</el-button>
@@ -259,7 +286,10 @@
 			</div>
 		</div>
 		<!-- 弹窗 -->
-		<to-base-64-dialog v-if="show64Dialog" v-on:closed="closedialog"></to-base-64-dialog>
+		<to-base-64-dialog v-if="show64Dialog" v-on:closed="closedialog">
+      
+    </to-base-64-dialog>
+    <div id="ruler" :draggable="true"></div>
 		<div class="dialog-mask" v-if="show64Dialog" v-on:closed="closedialog"></div>
 	</div>
 </template>
@@ -269,8 +299,9 @@ import CssMap from '@/object/cssMap.js';
 import toBase64Dialog from './module/toBase64Dialog';
 import ToBase64Dialog from './module/toBase64Dialog.vue';
 import menutree from '@/components/menuTree.vue';
+import ImageCompressor from '@/assets/image-compressor.min.js';
 export default {
-	components: { toBase64Dialog, ToBase64Dialog },
+	components: { toBase64Dialog},
 	data() {
 		return {
 			active: false,
@@ -293,11 +324,99 @@ export default {
 			dialogImageUrl: '',
 			dialogVisible: false,
 			unflodMargin: false,
-      unflodPadding: false,
+			unflodPadding: false,
 			file: null,
 			bgMode: 'contain',
 			animateSelect: '无',
-			selectClassFlag: false
+			selectClassFlag: false,
+			borderStyleOptions: [
+				{
+					value: 'solid',
+					label: '实线'
+				},
+				{
+					value: 'dashed',
+					label: '虚线'
+				},
+				{
+					value: 'none',
+					label: '无边框'
+				},
+        {
+					value: 'double',
+					label: '双边框'
+				},
+        {
+					value: 'outset',
+					label: '3d突出'
+				}
+			],
+			borderStyle: '实线',
+			ruleForm: {
+				name: '',
+				region: '',
+				date1: '',
+				date2: '',
+				delivery: false,
+				type: [],
+				resource: '',
+				desc: ''
+			},
+			rules: {
+				name: [
+					{ required: true, message: 'cdn地址', trigger: 'blur' },
+					{ min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+				],
+				region: [{ required: true, message: '请选择活动区域', trigger: 'change' }],
+				date1: [{ type: 'date', required: true, message: '请选择日期', trigger: 'change' }],
+				date2: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
+				type: [{ type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }],
+				resource: [{ required: true, message: '请选择活动资源', trigger: 'change' }],
+				desc: [{ required: true, message: '请填写活动形式', trigger: 'blur' }]
+			},
+      rulerVisible: false,
+      positionSelect: '默认',
+      positionSelectOptions: [
+        {
+          value: 'static',
+          label: '默认'
+        },
+        {
+          value: 'relative',
+          label: '相对自身偏移'
+        },
+        {
+          value: 'absolute',
+          label: '相对非默认父盒子绝对定位'
+        },
+        {
+          value: 'fixed',
+          label: '相对浏览器窗口'
+        }
+      ],
+      ellipsisSelect: '自动换行',
+      ellipsisSelectOptions: [
+        {
+          value: 'auto',
+          label: '自动换行'
+        },
+        {
+          value: 'aLineEllipsis',
+          label: '单行省略'
+        },
+        {
+          value: 'twoLineEllipsis',
+          label: '双行省略'
+        },
+        {
+          value: 'twoLineEllipsis',
+          label: '不换行'
+        },
+        {
+          value: 'twoLineEllipsis',
+          label: '双行省略'
+        },
+      ]
 		};
 	},
 	components: {
@@ -317,8 +436,39 @@ export default {
 		document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes / 100})`;
 		this.dragInput();
 		this.classMapInit();
+    let ruler = document.getElementById("ruler")
+    ruler.ondragover = function (e) {
+					console.log('ondragover');
+          console.log(e.pageX)
+					//关闭默认事件
+          that.rulerTool(e.pageX, e.pageY)
+					e.stopPropagation();
+					e.preventDefault();
+				};
 	},
 	methods: {
+    // 点到点连线，的距离
+    distanceP2P() {
+
+    },
+
+    // 直尺位置
+    openRuler() {
+      this.rulerVisible = !this.rulerVisible
+      let ruler = document.getElementById("ruler")
+      if(!this.rulerVisible) {
+        ruler.style.display = 'none'
+      } else {
+        ruler.style.display = 'block'
+
+      }
+    },
+    rulerTool(x,y) {
+      let ruler = document.getElementById("ruler")
+      ruler.style.left = x + 'px'
+      ruler.style.top = y + 'px'
+      console.log(ruler)
+    },
 		// 布局设置
 		flexMainLayout(mode) {
 			this.activeCssMap.display = 'flex';
@@ -370,8 +520,51 @@ export default {
 			}
 			this.unflodPadding = !this.unflodPadding;
 		},
+		borderSelect(e) {
+			this.activeCssMap.borderStyle = e;
+		},
+		picSelect() {
+			var obj = document.createElement('input');
+			obj.type = 'file';
+			obj.id = 'picSelect';
+			console.log(obj);
+
+			let that = this;
+			obj.addEventListener('change', function () {
+				console.log('input事件监听');
+				let resultFile = obj.files[0];
+
+				var reader = new FileReader();
+				reader.onload = function () {
+					that.compressImage(reader.result);
+				};
+				reader.readAsDataURL(resultFile);
+			});
+			obj.click();
+		},
 		// canvas 压缩图片
-		compressImage() {},
+		compressImage(imgFile) {
+			console.log('开始压缩');
+			console.log(imgFile);
+			new ImageCompressor(imgFile, {
+				quality: 0.6,
+				success(result) {
+					console.log('压缩完成');
+					console.log(result);
+					// const formData = new FormData(); // FormData学习地址 https://developer.mozilla.org/zh-CN/docs/Web/API/FormData
+					// formData.append('file', result, result.name);
+
+					// 通过XMLHttpRequest服务发送压缩的图像文件-Send the compressed image file to server with XMLHttpRequest.
+					// axios.post('/path/to/upload', formData).then(() => {
+					// 	console.log('Upload success');
+					// });
+				},
+				error(e) {
+					console.log('error');
+					console.log(e.message);
+				}
+			});
+		},
 		// 图片上传CDN
 		putImgCDN(url, file) {
 			// 需要配置跨域访问、AWS签名认证(临时签名需要从后端动态获取)
@@ -400,9 +593,13 @@ export default {
 			console.log('file-url:' + file.url);
 			this.activeCssMap.backgroundImage = 'url(' + file.url + ')';
 			this.activeCssMap.backgroundSize = 'contain';
+
+			this.compressImage(file.raw);
+
 			// this.putImgCDN("https://image-1251917893.cos.ap-guangzhou.myqcloud.com/imgOptimization/120.png",file)
 		},
-		textModeSelect(command) {
+		ellipsisSelectHandler() {
+      let command = this.ellipsisSelect
 			switch (command) {
 				case 'aLineEllipsis':
 					this.activeCssMap.setTextEllipsis();
@@ -413,7 +610,7 @@ export default {
 				default:
 					this.activeCssMap.setTextEllipsis();
 			}
-			this.activeCssMap.setTextEllipsis();
+			// this.activeCssMap.setTextEllipsis();
 		},
 		// 侧边栏折叠
 		handleOpen(key, keyPath) {
