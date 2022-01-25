@@ -44,8 +44,8 @@ export default class CssMap {
 		this.overflow = 'hidden'
 		this.textOverflow = 'ellipsis'
 		this.MsTextOverflow = 'ellipsis'
-		this.lineClamp = '2';
-		this.WebkitLineClamp = '2';
+		this.lineClamp = num + '';
+		this.WebkitLineClamp = num + '';
 	  this.display = '-webkit-box';
 		this.WebkitBoxOrient = 'vertical';
 		this.whiteSpace = 'wrap';

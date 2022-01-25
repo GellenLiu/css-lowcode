@@ -360,3 +360,15 @@ label span {
 .position-edit-item .el-input .el-input__inner {
 	width: 50px;
 }
+.color-picker-tool {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 46px;
+	height: 46px;
+	opacity: 0;
+}
+.color-picker-tool .el-color-picker__trigger {
+	width: 46px;
+	height: 46px;
+}

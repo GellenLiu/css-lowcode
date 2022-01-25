@@ -11,10 +11,9 @@
 				<div class="tools-list-item" @click="getBase64">
 					<img src="@/assets/toBase64.png" />
 				</div>
-				<div class="tools-list-item"><img src="@/assets/getColor.png" /></div>
-				<div class="tools-list-item"><img src="@/assets/getColor.png" /></div>
-				<div class="tools-list-item"><img src="@/assets/getColor.png" /></div>
-				<div class="tools-list-item"><img src="@/assets/getColor.png" /></div>
+				<div class="tools-list-item" style="position: relative;"><img src="@/assets/getColor.png" />
+          <el-color-picker class="color-picker-tool"></el-color-picker>
+        </div>
 				<!-- 配色表 -->
 				<div class="tools-list-item"><img src="@/assets/getColor.png" /></div>
 			</div>
@@ -73,7 +72,7 @@
 				</div>
 				<div class="edit-item position-edit-item">
 					<label>位置</label>
-          <el-select v-model="positionSelect" placeholder="默认" @change="positionSelect">
+					<el-select v-model="positionSelect" placeholder="默认" @change="positionSelect">
 						<el-option v-for="item in positionSelectOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
 					</el-select>
 					<el-input v-model="activeCssMap.inputPosition" placeholder="x"></el-input>
@@ -167,7 +166,7 @@
 					<el-color-picker v-model="activeCssMap.color"></el-color-picker>
 				</div>
 				<div class="edit-item edit-item-wrapper">
-          <label>文本对齐</label>
+					<label>文本对齐</label>
 					<div class="text-aligh-icon">
 						<img src="@/assets/text-center-icon.png" />
 					</div>
@@ -177,13 +176,13 @@
 					<div class="text-aligh-icon">
 						<img src="@/assets/text-right-icon.png" />
 					</div>
-          <div class="text-aligh-icon">
+					<div class="text-aligh-icon">
 						<img src="@/assets/both-ends.png" />
 					</div>
 				</div>
 				<div class="edit-item">
 					<label>省略换行</label>
-          <el-select v-model="ellipsisSelect" placeholder="请选择" @change="ellipsisSelectHandler">
+					<el-select v-model="ellipsisSelect" placeholder="请选择" @change="ellipsisSelectHandler">
 						<el-option v-for="item in ellipsisSelectOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
 					</el-select>
 				</div>
@@ -286,10 +285,8 @@
 			</div>
 		</div>
 		<!-- 弹窗 -->
-		<to-base-64-dialog v-if="show64Dialog" v-on:closed="closedialog">
-      
-    </to-base-64-dialog>
-    <div id="ruler" :draggable="true"></div>
+		<to-base-64-dialog v-if="show64Dialog" v-on:closed="closedialog"></to-base-64-dialog>
+		<div id="ruler" :draggable="true"></div>
 		<div class="dialog-mask" v-if="show64Dialog" v-on:closed="closedialog"></div>
 	</div>
 </template>
@@ -301,7 +298,7 @@ import ToBase64Dialog from './module/toBase64Dialog.vue';
 import menutree from '@/components/menuTree.vue';
 import ImageCompressor from '@/assets/image-compressor.min.js';
 export default {
-	components: { toBase64Dialog},
+	components: { toBase64Dialog },
 	data() {
 		return {
 			active: false,
@@ -342,16 +339,16 @@ export default {
 					value: 'none',
 					label: '无边框'
 				},
-        {
+				{
 					value: 'double',
 					label: '双边框'
 				},
-        {
+				{
 					value: 'outset',
 					label: '3d突出'
 				}
 			],
-			borderStyle: '实线',
+			borderStyle: '实线', //边框设置
 			ruleForm: {
 				name: '',
 				region: '',
@@ -374,49 +371,49 @@ export default {
 				resource: [{ required: true, message: '请选择活动资源', trigger: 'change' }],
 				desc: [{ required: true, message: '请填写活动形式', trigger: 'blur' }]
 			},
-      rulerVisible: false,
-      positionSelect: '默认',
-      positionSelectOptions: [
-        {
-          value: 'static',
-          label: '默认'
-        },
-        {
-          value: 'relative',
-          label: '相对自身偏移'
-        },
-        {
-          value: 'absolute',
-          label: '相对非默认父盒子绝对定位'
-        },
-        {
-          value: 'fixed',
-          label: '相对浏览器窗口'
-        }
-      ],
-      ellipsisSelect: '自动换行',
-      ellipsisSelectOptions: [
-        {
-          value: 'auto',
-          label: '自动换行'
-        },
-        {
-          value: 'aLineEllipsis',
-          label: '单行省略'
-        },
-        {
-          value: 'twoLineEllipsis',
-          label: '双行省略'
-        },
-        {
-          value: 'twoLineEllipsis',
-          label: '不换行'
-        },
-        {
-          value: 'twoLineEllipsis',
-          label: '双行省略'
-        },
-      ]
+			rulerVisible: false,
+			positionSelect: '默认',
+			positionSelectOptions: [
+				{
+					value: 'static',
+					label: '默认'
+				},
+				{
+					value: 'relative',
+					label: '相对自身偏移'
+				},
+				{
+					value: 'absolute',
+					label: '相对非默认父盒子绝对定位'
+				},
+				{
+					value: 'fixed',
+					label: '相对浏览器窗口'
+				}
+			],
+			ellipsisSelect: '自动换行',
+			ellipsisSelectOptions: [
+				{
+					value: 'auto',
+					label: '自动换行'
+				},
+				{
+					value: 'aLineEllipsis',
+					label: '单行省略'
+				},
+				{
+					value: 'twoLineEllipsis',
+					label: '双行省略'
+				},
+				{
+					value: 'twoLineEllipsis',
+					label: '不换行'
+				},
+				{
+					value: 'thirdLineEllipsis',
+					label: '三行省略'
+				}
+			]
 		};
 	},
 	components: {
@@ -436,39 +433,36 @@ export default {
 		document.getElementById('visualViews').style.transform = `scale(${this.scaleTimes / 100})`;
 		this.dragInput();
 		this.classMapInit();
-    let ruler = document.getElementById("ruler")
-    ruler.ondragover = function (e) {
-					console.log('ondragover');
-          console.log(e.pageX)
-					//关闭默认事件
-          that.rulerTool(e.pageX, e.pageY)
-					e.stopPropagation();
-					e.preventDefault();
-				};
+		let ruler = document.getElementById('ruler');
+		ruler.ondragover = function (e) {
+			console.log('ondragover');
+			console.log(e.pageX);
+			//关闭默认事件
+			that.rulerTool(e.pageX, e.pageY);
+			e.stopPropagation();
+			e.preventDefault();
+		};
 	},
 	methods: {
-    // 点到点连线，的距离
-    distanceP2P() {
+		// 点到点连线，的距离
+		distanceP2P() {},
 
-    },
-
-    // 直尺位置
-    openRuler() {
-      this.rulerVisible = !this.rulerVisible
-      let ruler = document.getElementById("ruler")
-      if(!this.rulerVisible) {
-        ruler.style.display = 'none'
-      } else {
-        ruler.style.display = 'block'
-
-      }
-    },
-    rulerTool(x,y) {
-      let ruler = document.getElementById("ruler")
-      ruler.style.left = x + 'px'
-      ruler.style.top = y + 'px'
-      console.log(ruler)
-    },
+		// 直尺位置
+		openRuler() {
+			this.rulerVisible = !this.rulerVisible;
+			let ruler = document.getElementById('ruler');
+			if (!this.rulerVisible) {
+				ruler.style.display = 'none';
+			} else {
+				ruler.style.display = 'block';
+			}
+		},
+		rulerTool(x, y) {
+			let ruler = document.getElementById('ruler');
+			ruler.style.left = x + 'px';
+			ruler.style.top = y + 'px';
+			console.log(ruler);
+		},
 		// 布局设置
 		flexMainLayout(mode) {
 			this.activeCssMap.display = 'flex';
@@ -599,13 +593,16 @@ export default {
 			// this.putImgCDN("https://image-1251917893.cos.ap-guangzhou.myqcloud.com/imgOptimization/120.png",file)
 		},
 		ellipsisSelectHandler() {
-      let command = this.ellipsisSelect
+			let command = this.ellipsisSelect;
 			switch (command) {
 				case 'aLineEllipsis':
 					this.activeCssMap.setTextEllipsis();
 					break;
 				case 'twoLineEllipsis':
 					this.activeCssMap.setTwoLineEllipsis();
+					break;
+				case 'thirdLineEllipsis':
+					this.activeCssMap.setTwoLineEllipsis(3);
 					break;
 				default:
 					this.activeCssMap.setTextEllipsis();
