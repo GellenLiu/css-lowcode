@@ -66,7 +66,7 @@
 				<div class="components-list-tab" :class="editActive ? 'tab-active' : ''" @click="switchEditTab(1)">源代码</div>
 			</div>
 			<!-- 设置 -->
-			<div v-if="!editActive">
+			<div class="edit-content-wrapper" v-if="!editActive">
 				<div class="edit-item module-edit-item">
 					<label>选择模块</label>
 					<el-input v-model="activeCssMap.className" placeholder="请输入class"></el-input>

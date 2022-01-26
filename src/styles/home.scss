@@ -203,6 +203,11 @@ iframe {
 	background-color: white;
 	border-top: 2px solid #eef0f6;
 	z-index: 97;
+	// overflow-y: auto;
+}
+.edit-content-wrapper {
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 .edit-item {
 	margin-bottom: 16px;
