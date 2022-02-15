@@ -383,3 +383,7 @@ label span {
 	width: 110px;
 	margin-right: 10px;
 }
+// 滚动条样式
+#visualViews::-webkit-scrollbar {
+  width: 0;
+}

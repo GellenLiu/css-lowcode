@@ -685,7 +685,7 @@ export default {
 			this.currentClass = this.activeClass;
 			this.activeClass = e.target.innerText.substring(e.target.innerText.indexOf('.') + 1);
 			document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.currentClass).style.outline = 'none';
-			document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = 'red solid 2px';
+			document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = '#043af9 solid 2px';
 			if (this.currentClass === this.activeClass) {
 				this.selectClassFlag = !this.selectClassFlag;
 			}
@@ -948,7 +948,7 @@ export default {
 							this.currentClass = this.activeClass;
 							this.activeClass = e.target.className;
 							document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.currentClass).style.outline = 'none';
-							document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = 'red solid 2px';
+							document.getElementById('visualViews').contentWindow.document.querySelector('.' + this.activeClass).style.outline = '#043af9 solid 2px';
 							if (this.currentClass === this.activeClass) {
 								this.selectClassFlag = !this.selectClassFlag;
 							}
