@@ -172,16 +172,16 @@
 				</div>
 				<div class="edit-item edit-item-wrapper">
 					<label>文本对齐</label>
-					<div class="text-aligh-icon">
+					<div class="text-aligh-icon" @click="setTextAligh('center')">
 						<img src="@/assets/text-center-icon.png" />
 					</div>
-					<div class="text-aligh-icon">
+					<div class="text-aligh-icon" @click="setTextAligh('left')">
 						<img src="@/assets/text-left-iocn.png" />
 					</div>
-					<div class="text-aligh-icon">
+					<div class="text-aligh-icon" @click="setTextAligh('right')">
 						<img src="@/assets/text-right-icon.png" />
 					</div>
-					<div class="text-aligh-icon">
+					<div class="text-aligh-icon" @click="setTextAligh('justify')">
 						<img src="@/assets/both-ends.png" />
 					</div>
 				</div>
@@ -309,7 +309,7 @@ export default {
 			editActive: false,
 			show64Dialog: false,
 			currentPhone: 'iphone 6/7/8',
-			scaleTimes: 170,
+			scaleTimes: 160,
 			command: 1,
 			base64: '',
 			classMap: new ClassMap(), //文件所有class
@@ -474,6 +474,14 @@ export default {
 		};
 	},
 	methods: {
+		setTextAligh(mode) {
+          this.activeCssMap.textAlign = mode
+		  if(mode == "justify") {
+     		  this.activeCssMap.textAlignLast = "justify"
+		  } else {
+			  this.activeCssMap.textAlignLast = "auto"
+		  }
+		},
 		// 点到点连线，的距离
 		distanceP2P() {},
 
@@ -659,18 +667,46 @@ export default {
 					style = require('../../styles/styleStore/app.js');
 					break;
 			}
-      console.log(style.style)
-      let str = style.style
-      str.replaceAll(/(\n|\r|(\r\n)|(\u0085)|(\u2028)|(\u2029))/g, "");
-      let a = str.indexOf('.')
-      let b = str.indexOf('{')
-      let c = str.indexOf(':')
-      let d = str.indexOf(';')
-      let hfcssMap = new CssMap(str.substring(a+1, b))
-      hfcssMap[str.substring(b+1, c)] = str.substring(c+1,d)
-      this.classMap.setClass(str.substring(a+1, b), hfcssMap)
-      console.log("classmmmm:")
-      console.log(this.classMap)
+			console.log(style.style);
+			let str = style.style.replace(/\s\t\n/g, "");
+			this.classMap.componentStyle += str;
+			console.log(this.classMap)
+			console.log("components:"+this.classMap.componentStyle)
+			// str.replaceAll(/(\n|\r|(\r\n)|(\u0085)|(\u2028)|(\u2029))/g, '');
+			// let a = str.indexOf('.');
+			// let b = str.indexOf('{');
+			// let c = str.indexOf(':');
+			// let d = str.indexOf(';');
+			// let hfcssMap = new CssMap(str.substring(a + 1, b));
+			// hfcssMap[str.substring(b + 1, c)] = str.substring(c + 1, d);
+			// this.classMap.setClass(str.substring(a + 1, b), hfcssMap);
+			// console.log('classmmmm:');
+			// console.log(this.classMap);
+
+			function cssParse(str) {
+				// 模块分割
+				let regEmpty = /\s/g;
+				str = str.toString().replace(regEmpty, '');
+				let strArr = str.toString().split('}');
+				strArr.pop();
+				console.log(strArr);
+				for (let item of strArr) {
+					let regClassName = /\..*?{/;
+					let className = item.match(regClassName)[0];
+					let len = className.length - 2;
+					className = className.substring(1, len);
+					let regAttri = /([;{\s\t\n]).*?:/g;
+					let attriName = item.match(regAttri);
+					console.log(attriName);
+					let regAtrriValue = /:.*?;/g;
+					let AtrriValue = item.match(regAtrriValue);
+					console.log(AtrriValue);
+					for (let attriIndex in attriName) {
+
+					}
+				}
+			}
+			// cssParse(str);
 		},
 		// 侧边栏折叠
 		handleOpen(key, keyPath) {
@@ -859,7 +895,7 @@ export default {
 			console.log(views.body);
 			let style = document.createElement('style');
 			style.id = 'css_id';
-			style.innerText = this.classMap.getContent();
+			style.innerText = this.classMap.componentStyle + this.classMap.getContent();
 			console.log(style);
 			// 删除原有的节点
 			let currentStyle = document.getElementById('visualViews').contentWindow.document.getElementById('css_id');
