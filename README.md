@@ -20,9 +20,17 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![img](./demo/index.png)
+<center>系统首页</center>
 
+![img](./demo/structure.png)
+<center>左侧结构树</center>
+
+![img](./demo/view.png)
+<center>中间视图窗口</center>
+
+![img](./demo/edit.png)
+<center>右侧编辑栏</center>
 
 1、编辑与视觉同步，所见即所得
 2、自动适配移动端、PC端等不同设备的UI表现（提供适配方案选择）
