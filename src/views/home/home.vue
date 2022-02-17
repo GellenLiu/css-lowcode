@@ -426,19 +426,19 @@ export default {
 				},
 				{
 					value: 'qqSpeed',
-					label: 'QQ飞车'
+					label: '组件样式1'
 				},
 				{
 					value: 'pvp',
-					label: '王者荣耀'
+					label: '组件样式2'
 				},
 				{
 					value: 'gp',
-					label: '和平精英'
+					label: '组件样式3'
 				},
 				{
 					value: 'hlddz',
-					label: '欢乐斗地主'
+					label: '组件样式4'
 				}
 			]
 		};
