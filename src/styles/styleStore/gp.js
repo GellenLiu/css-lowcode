@@ -1,7 +1,7 @@
 module.exports = {
   style: `
   .date-item-wrap {
-    background-color: red;
+    background-color: #6CCE6F;
   }
   `
 }
