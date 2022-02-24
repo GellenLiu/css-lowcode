@@ -19,6 +19,13 @@
 ### 组件模块：针对不同业务场景，一键设置不同的UI表现
 接入组件库子工程，调用组件库的不同样式UI
 ![img](./demo/component.png)
+1.选择默认样式
+![img](./demo/app.png)
+2.选择组件样式1
+![img](./demo/style1.png)
+3.选择组件样式2
+![img](./demo/style2.png)
+
 
 ### 一键设置文本样式
 ![img](./demo/textAlign.png)
