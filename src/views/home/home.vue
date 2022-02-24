@@ -301,6 +301,7 @@ import CssMap from '@/object/cssMap.js';
 import basetodialog from '@/views/home/module/basetodialog.vue';
 import menutree from '@/components/menuTree.vue';
 import ImageCompressor from '@/assets/image-compressor.min.js';
+
 export default {
 	components: { basetodialog, menutree },
 	data() {
@@ -427,8 +428,11 @@ export default {
 		menutree
 	},
 	mounted() {
-		let text = require('../../styles/styleStore/app.js');
-		console.log(text.style);
+        console.log("styles: import")
+		var styleString = `requireCSS@/comm/components/meeting/app.css`;
+		console.log(styleString)
+		// let text = require('@/styles/styleStore/app.js');
+		// console.log(text.style);
 
 		this.switchPhone(this.command);
 		let that = this;
@@ -632,24 +636,25 @@ export default {
 			let style;
 			switch (command) {
 				case 'app':
-					style = require('../../styles/styleStore/app.js');
+					style = `requireCSS@/comm/components/meeting/app.css`;
 					break;
 				case 'style1':
-					style = require('../../styles/styleStore/gp.js');
+					style = `requireCSS@/comm/components/meeting/style1.css`;
 					break;
 				case 'style2':
-					style = require('../../styles/styleStore/qqSpeed.js');
+					style = `requireCSS@/comm/components/meeting/style2.css`;
 					break;
 				case 'style3':
-					style = require('../../styles/styleStore/hlddz.js');
+					style = `requireCSS@/comm/components/meeting/style3.css`;
 					break;
 				default:
-					style = require('../../styles/styleStore/app.js');
+					style = `requireCSS@/comm/components/meeting/app.css`;
 					break;
 			}
 
-			console.log(style.style);
-			let str = style.style.replace(/\s\t\n/g, '');
+			// console.log(style.style);
+			console.log(style)
+			let str = style.replace(/\s\t\n/g, '');
 			this.classMap.componentStyle += str;
 			console.log(this.classMap);
 			console.log('components:' + this.classMap.componentStyle);
