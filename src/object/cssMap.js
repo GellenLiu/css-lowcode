@@ -6,6 +6,7 @@ export default class CssMap {
 	// constructor(cssString) {}
 	setClassName(className) {
 		this.className = className
+		this.componentStyle = ''
 	}
 	// 显示css内容
 	getContent() {
@@ -22,7 +23,7 @@ export default class CssMap {
 				.toLowerCase()
 			css += key + ':' + this[tmp].toString() + ';'
 		}
-		return "." + this.className + '{' + css + '}'
+		return this.componentStyle + "." + this.className + '{' + css + '}'
 	}
 	setAnimate(animation) {
     this.animation = animation

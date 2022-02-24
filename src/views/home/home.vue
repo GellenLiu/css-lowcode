@@ -655,9 +655,9 @@ export default {
 			// console.log(style.style);
 			console.log(style)
 			let str = style.replace(/\s\t\n/g, '');
-			this.classMap.componentStyle += str;
-			console.log(this.classMap);
-			console.log('components:' + this.classMap.componentStyle);
+			this.activeCssMap.componentStyle = str;
+			console.log(this.activeCssMap);
+			console.log('components:' + this.activeCssMap.componentStyle);
 			// str.replaceAll(/(\n|\r|(\r\n)|(\u0085)|(\u2028)|(\u2029))/g, '');
 			// let a = str.indexOf('.');
 			// let b = str.indexOf('{');
